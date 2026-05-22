@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#b86840">
+<title>Ember</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='3' y='2' width='10' height='12' fill='%23d4c4a8'/><rect x='4' y='3' width='8' height='10' fill='%23faf5e8'/><rect x='3' y='2' width='2' height='12' fill='%23b86840'/><rect x='10' y='1' width='2' height='3' fill='%23b86840'/></svg>">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAC7UlEQVR4nO3cPU5UURiAYTFQsAdrKhs3YIzLMC7AJbgEl+ACjMsw7sDe2p6KkEBjQULFa3DOuT8Dz9NP5mS+l28uF2ZObq4uX8BDXm59APZLHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgfpdKXnub1e6YmeibPzFZ5k4Tg0sZD7F3bJShaLQxbruHudl0lkgThksb5lEpl9QaqMDc1+8afGoYzNTR3BvDiUsRPzBjEpDmXsyqRxzIhDGTs0YyjDcShjt4ZH4/Y5aSwOa2Pnxga01t9Wnr0fnz8c/Nj3X75PPMnjDWwOa+MoDIzJNQdJHKRD4/CeckQOHZbNQRIHSRwkcZDEQdrpHdKR+4mvPn6aeJLnzOYgiYMkDpI4SOIgiYMkDpI4SOIg7fQO6YiLN++2PsID/nz7uvUR/pvNQRIHSRwkcZDEQRIHSRwkcZDEQXqCd0j36d//2Xrx+u1qJ3k8m4MkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYMkDpI4SOIgiYN0uvUB5vv96+fWR3gibA6SOEjiIImDJA6SOEjiIImDJA7Syc3V5SGPu72efRKWdHZ+wINsDpI4SOIgiYMkDtKhcRx09cs2Dh2WzUESB2kgDu8sR2FgTDYHaSwOy2PnxgZkc5CG47A8dmt4NDM2hz52aMZQJr2t6GNXJo1j3jWHPnZi3iCmXpDqY3NTRzD7txV9bGj2i7/AB6nvjuj/CNe0zM/kYp+yl8g6llzVC38Fw/3RVTLXKm/fa30/h2uRI+T2OUkcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB0kcJHGQxEESB+kv+vdNS7ZGGVUAAAAASUVORK5CYII=">
+<link href="https://cdn.jsdelivr.net/npm/zpix-pixel-font@3.1.1/zpix.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{margin:0;background:#f4ede0;font-family:'zpix',monospace;color:#3d2e1f;-webkit-tap-highlight-color:transparent}
+::selection{background:rgba(184,104,64,0.25)}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#f4ede0}
+::-webkit-scrollbar-thumb{background:#d4c4a8}
+
+.shell{min-height:100vh;position:relative}
+.dot-bg{position:fixed;inset:0;background-image:radial-gradient(circle,#d8c9a8 1px,transparent 1px);background-size:16px 16px;opacity:.5;pointer-events:none;z-index:0}
+
+.label{letter-spacing:3px;text-transform:uppercase;font-size:9px;color:#a89478;font-family:'zpix',monospace}
+.footer{text-align:center;letter-spacing:3px;text-transform:uppercase;font-size:9px;color:#a89478;padding:16px 0}
+
+.nav-btn{background:none;border:none;font-family:'zpix',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;padding:4px 0}
+
+.btn{padding:8px 16px;border:2px solid #3d2e1f;background:#faf5e8;color:#3d2e1f;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'zpix',monospace;cursor:pointer;box-shadow:2px 2px 0 #d4c4a8}
+.btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #d4c4a8}
+.btn-dk{padding:8px 16px;border:2px solid #3d2818;background:#3d2818;color:#f4ede0;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-family:'zpix',monospace;cursor:pointer;box-shadow:3px 3px 0 #a89478}
+.btn-dk:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #a89478}
+
+.input{width:100%;padding:8px 10px;border:2px solid #d4c4a8;background:#faf5e8;color:#3d2e1f;font-family:'zpix',monospace;font-size:12px;outline:none}
+.input::placeholder{color:#a89478}
+
+.ann-input{padding:8px 10px;border:2px solid #d4c4a8;background:#faf5e8;color:#3d2e1f;font-family:'zpix',monospace;font-size:12px;outline:none}
+.ann-input::placeholder{color:#a89478}
+.ann-input:disabled{background:#f0e8d8}
+
+.ann-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:#f4ede0;border-top:2px solid #d4c4a8;padding:10px 16px 14px}
+.ann-card{padding:14px 16px;background:rgba(235,224,200,0.35);border-left:3px solid #b86840;margin-bottom:8px}
+
+.hl-text{border-bottom:2px solid #b86840;background:rgba(184,104,64,0.12);padding-bottom:1px}
+
+.clear-btn{background:none;border:none;color:#a89478;font-family:'zpix',monospace;font-size:9px;cursor:pointer;margin-left:6px}
+
+.log-card{display:flex;margin-bottom:8px;border:2px solid #d4c4a8;background:#faf5e8;cursor:pointer;box-shadow:3px 3px 0 #d4c4a8;transition:transform .1s}
+
+.dow-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{aspect-ratio:1;display:flex;flex-direction:column;justify-content:space-between;padding:3px;position:relative;overflow:hidden;transition:transform .1s}
+.cal-filled{border:2px solid #d4c4a8;background:#faf5e8;cursor:pointer}
+.cal-empty{border:2px dashed #d4c4a8;background:transparent}
+
+.err-box{margin-top:12px;padding:10px;background:rgba(184,104,64,0.15);border:2px solid #b86840;color:#3d2e1f;font-size:11px;line-height:1.6;word-break:break-all}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+/* ═══ Ember · Diary Cabinet ═══ */
+
+var useState = React.useState,
+  useEffect = React.useEffect,
+  useRef = React.useRef,
+  useMemo = React.useMemo,
+  useCallback = React.useCallback;
+
+/* ─── Time Feels ─── */
+var TIME_FEELS = {
+  dawn: {
+    label: "DAWN",
+    color: "#b8b0a0"
+  },
+  morning: {
+    label: "MORNING",
+    color: "#ddb850"
+  },
+  afternoon: {
+    label: "AFTERNOON",
+    color: "#d08030"
+  },
+  dusk: {
+    label: "DUSK",
+    color: "#b84830"
+  },
+  night: {
+    label: "NIGHT",
+    color: "#685878"
+  },
+  latenight: {
+    label: "LATE NIGHT",
+    color: "#302018"
+  }
+};
+
+/* ─── Mood Options ─── */
+var MOODS = [
+  { key: "happy", label: "HAPPY", emoji: "😊", color: "#f0c040" },
+  { key: "sad", label: "SAD", emoji: "😢", color: "#6090c0" },
+  { key: "angry", label: "ANGRY", emoji: "😠", color: "#c04040" },
+  { key: "anxious", label: "ANXIOUS", emoji: "😰", color: "#a060a0" },
+  { key: "calm", label: "CALM", emoji: "😌", color: "#60a080" },
+  { key: "excited", label: "EXCITED", emoji: "🤩", color: "#e07030" },
+  { key: "tired", label: "TIRED", emoji: "😴", color: "#808090" },
+  { key: "nostalgic", label: "NOSTALGIC", emoji: "🥺", color: "#c09060" },
+  { key: "grateful", label: "GRATEFUL", emoji: "🙏", color: "#e0a040" },
+  { key: "confused", label: "CONFUSED", emoji: "🤔", color: "#9090a0" },
+  { key: "tired-happy", label: "TIRE-HAPPY", emoji: "💪", color: "#c08060" }
+];
+
+/* ─── Weather Options ─── */
+var WEATHERS = [
+  { key: "sunny", label: "SUNNY", emoji: "☀️", color: "#f0c040" },
+  { key: "cloudy", label: "CLOUDY", emoji: "☁️", color: "#909090" },
+  { key: "rainy", label: "RAINY", emoji: "🌧️", color: "#5090c0" },
+  { key: "snowy", label: "SNOWY", emoji: "❄️", color: "#c0d8f0" },
+  { key: "stormy", label: "STORMY", emoji: "⛈️", color: "#605080" },
+  { key: "windy", label: "WINDY", emoji: "💨", color: "#a0c0a0" },
+  { key: "foggy", label: "FOGGY", emoji: "🌫️", color: "#b0b0a0" },
+  { key: "clear", label: "CLEAR", emoji: "🌤️", color: "#70b0d0" }
+];
+
+/* ─── API ─── */
+var SUPABASE_URL = "https://iqsmsfrdczftqeckuess.supabase.co";
+var FUNCTIONS_BASE = SUPABASE_URL + "/functions/v1/ember";
+var ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxc21zZnJkY3pmdHFlY2t1ZXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjUyMzUsImV4cCI6MjA5Mzc0MTIzNX0.VXa3L5MErqIqrpwgZS9vgndyKUBIYnKV1bCB2a2nvSw";
+
+var API_HEADERS = {
+  "Content-Type": "application/json",
+  "apikey": ANON_KEY,
+  "Authorization": "Bearer " + ANON_KEY
+};
+
+function api(path) {
+  return fetch(FUNCTIONS_BASE + (path || ""), {
+    headers: API_HEADERS
+  }).then(function (r) {
+    return r.json().then(function (d) {
+      if (!r.ok) throw new Error(d.error || r.status);
+      return d;
+    });
+  });
+}
+function apiPost(path, body) {
+  return fetch(FUNCTIONS_BASE + (path || ""), {
+    method: "POST",
+    headers: API_HEADERS,
+    body: JSON.stringify(body)
+  }).then(function (r) {
+    return r.json().then(function (d) {
+      if (!r.ok) throw new Error(d.error || r.status);
+      return d;
+    });
+  });
+}
+function apiDelete(path) {
+  return fetch(FUNCTIONS_BASE + (path || ""), {
+    method: "DELETE",
+    headers: API_HEADERS
+  }).then(function (r) {
+    return r.json().then(function (d) {
+      if (!r.ok) throw new Error(d.error || r.status);
+      return d;
+    });
+  });
+}
+
+/* ─── Pixel Notebook Icon ─── */
+function NotebookIcon(props) {
+  var size = props.size || 48;
+  return /*#__PURE__*/React.createElement("svg", {
+    width: size,
+    height: size,
+    viewBox: "0 0 16 16",
+    style: {
+      imageRendering: "pixelated",
+      display: "block",
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "2",
+    width: "10",
+    height: "12",
+    fill: "#d4c4a8"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "4",
+    y: "3",
+    width: "8",
+    height: "10",
+    fill: "#faf5e8"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "2",
+    width: "2",
+    height: "12",
+    fill: "#b86840"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "6",
+    y: "5",
+    width: "5",
+    height: "1",
+    fill: "#d4c4a8"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "6",
+    y: "7",
+    width: "5",
+    height: "1",
+    fill: "#d4c4a8"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "6",
+    y: "9",
+    width: "3",
+    height: "1",
+    fill: "#d4c4a8"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "10",
+    y: "1",
+    width: "2",
+    height: "3",
+    fill: "#b86840"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "10",
+    y: "4",
+    width: "1",
+    height: "1",
+    fill: "#b86840"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "11",
+    y: "4",
+    width: "1",
+    height: "1",
+    fill: "#b86840"
+  }));
+}
+
+/* ─── Header ─── */
+function Header(props) {
+  var page = props.page,
+    setPage = props.setPage,
+    setDetailFrom = props.setDetailFrom;
+  var navItems = [{
+    key: "home",
+    label: "HOME"
+  }, {
+    key: "log",
+    label: "LOG"
+  }, {
+    key: "words",
+    label: "WORDS"
+  }, {
+    key: "write",
+    label: "WRITE"
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "24px 16px 0"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: "8px",
+      position: "relative",
+      minHeight: "40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      transform: "translate(-50%, -50%)"
+    }
+  }, /*#__PURE__*/React.createElement(NotebookIcon, {
+    size: 36
+  }))), /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontSize: "24px",
+      color: "#3d2e1f",
+      letterSpacing: "6px",
+      textTransform: "uppercase",
+      margin: "8px 0 12px",
+      textShadow: "2px 2px 0 #d4c4a8"
+    }
+  }, "EMBER"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "2px dashed #d4c4a8",
+      margin: "0 auto 12px",
+      maxWidth: "560px"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: "24px"
+    }
+  }, navItems.map(function (n) {
+    var active = page === n.key || page === "detail" && n.key === "home";
+    return /*#__PURE__*/React.createElement("button", {
+      key: n.key,
+      onClick: function () {
+        setPage(n.key);
+        if (n.key !== "detail") setDetailFrom(n.key);
+      },
+      className: "nav-btn",
+      style: {
+        color: active ? "#3d2e1f" : "#a89478",
+        borderBottom: active ? "2px solid #3d2e1f" : "2px solid transparent"
+      }
+    }, n.label);
+  })));
+}
+
+/* ─── TimeFeelBadge ─── */
+function TimeFeelBadge(props) {
+  var tf = TIME_FEELS[props.timefeel] || TIME_FEELS.morning;
+  var s = props.style || {};
+  return /*#__PURE__*/React.createElement("span", {
+    style: Object.assign({
+      display: "inline-block",
+      padding: "2px 8px",
+      fontSize: "9px",
+      letterSpacing: "3px",
+      textTransform: "uppercase",
+      color: "#faf5e8",
+      background: tf.color,
+      fontFamily: "'zpix',monospace"
+    }, s)
+  }, tf.label);
+}
+
+/* ─── Annotation Input Bar ─── */
+function AnnotationBar(props) {
+  var quote = props.quote,
+    onSubmit = props.onSubmit,
+    onClear = props.onClear,
+    disabled = props.disabled;
+  var _t = useState("");
+  var text = _t[0];
+  var setText = _t[1];
+  var inputRef = useRef(null);
+  useEffect(function () {
+    if (quote && inputRef.current) inputRef.current.focus();
+  }, [quote]);
+  function handleSubmit() {
+    if (!text.trim() || !quote) return;
+    onSubmit(text.trim());
+    setText("");
+  }
+  var canSend = quote && text.trim();
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ann-bar"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: "10px",
+      letterSpacing: "2px",
+      textTransform: "uppercase",
+      marginBottom: "6px",
+      minHeight: "16px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap"
+    }
+  }, quote ? /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#b86840"
+    }
+  }, "「" + (quote.length > 30 ? quote.slice(0, 30) + "…" : quote) + "」", /*#__PURE__*/React.createElement("button", {
+    onClick: onClear,
+    className: "clear-btn"
+  }, "\u2715")) : /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#a89478"
+    }
+  }, "SELECT TEXT TO ANNOTATE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    ref: inputRef,
+    value: text,
+    onChange: function (e) {
+      setText(e.target.value);
+    },
+    onKeyDown: function (e) {
+      if (e.key === "Enter") handleSubmit();
+    },
+    disabled: !quote || disabled,
+    placeholder: quote ? "Write your note..." : "",
+    className: "ann-input",
+    style: {
+      flex: 1,
+      opacity: quote ? 1 : 0.5
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: handleSubmit,
+    disabled: !canSend,
+    className: canSend ? "btn-dk" : "btn",
+    style: {
+      padding: "8px 14px",
+      fontSize: "12px",
+      letterSpacing: "1px",
+      minWidth: "48px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, canSend ? "SEND" : "\u2192"))));
+}
+
+/* ─── Entry Body with highlights ─── */
+function EntryBody(props) {
+  var body = props.body,
+    annotations = props.annotations,
+    onSelect = props.onSelect,
+    entryId = props.entryId;
+  function handleUp() {
+    var sel = window.getSelection();
+    var text = sel ? sel.toString().trim() : "";
+    if (text.length > 1) {
+      // 使用 Selection 的 anchorOffset 计算相对于 body 的真实位置
+      var start = body.indexOf(text);
+      if (sel.anchorNode && sel.anchorNode.parentNode) {
+        // 遍历已渲染的 span 节点推算真实偏移
+        var node = sel.anchorNode.parentNode;
+        var offset = 0;
+        var container = document.getElementById("entry-body-" + (props.entryId || ""));
+        if (container) {
+          var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+          var n;
+          while ((n = walker.nextNode())) {
+            if (n === sel.anchorNode) {
+              offset += sel.anchorOffset;
+              break;
+            }
+            offset += n.textContent.length;
+          }
+          start = offset - text.length;
+        }
+      }
+      // 验证 start 处文字是否匹配
+      if (start >= 0 && body.slice(start, start + text.length) === text) {
+        onSelect(text, start, start + text.length);
+      } else {
+        // fallback
+        onSelect(text, start, start + text.length);
+      }
+    }
+  }
+  function renderBody() {
+    if (!annotations || annotations.length === 0) {
+      // 没有注释时也包裹在 span 中，确保 pre-wrap 换行生效
+      return /*#__PURE__*/React.createElement("span", null, body);
+    }
+    var matches = [];
+    annotations.forEach(function (a) {
+      var s = typeof a.quote_start === "number" ? a.quote_start : body.indexOf(a.quote);
+      var e = typeof a.quote_end === "number" ? a.quote_end : s + a.quote.length;
+      if (s >= 0) matches.push({
+        start: s,
+        end: e
+      });
+    });
+    matches.sort(function (a, b) {
+      return a.start - b.start;
+    });
+    var parts = [];
+    var last = 0;
+    matches.forEach(function (m) {
+      if (m.start >= last) {
+        if (m.start > last) parts.push({
+          t: body.slice(last, m.start),
+          h: false
+        });
+        parts.push({
+          t: body.slice(m.start, m.end),
+          h: true
+        });
+        last = m.end;
+      }
+    });
+    if (last < body.length) parts.push({
+      t: body.slice(last),
+      h: false
+    });
+    if (parts.length === 0) return body;
+    return parts.map(function (p, i) {
+      return p.h ? /*#__PURE__*/React.createElement("span", {
+        key: i,
+        className: "hl-text"
+      }, p.t) : /*#__PURE__*/React.createElement("span", {
+        key: i
+      }, p.t);
+    });
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    id: entryId ? "entry-body-" + entryId : undefined,
+    onMouseUp: handleUp,
+    onTouchEnd: handleUp,
+    style: {
+      fontSize: "13px",
+      lineHeight: 2.1,
+      whiteSpace: "pre-wrap",
+      color: "#3d2e1f",
+      userSelect: "text",
+      WebkitUserSelect: "text"
+    }
+  }, renderBody());
+}
+
+/* ─── Annotation Card ─── */
+function AnnotationCard(props) {
+  var a = props.ann;
+  var replies = props.replies || [];
+  var time = a.created_at ? new Date(a.created_at).toLocaleTimeString("en", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }) : a.time || "";
+  var authorLabel = (a.author === "A.L." || a.author === "ai") ? "A.L." : "TSUKI";
+  var isAL = authorLabel === "A.L.";
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ann-card",
+    style: isAL ? { marginLeft: "16px", borderLeft: "2px solid #b86840", paddingLeft: "10px" } : {}
+  }, a.quote ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontStyle: "italic",
+      color: "#a89478",
+      fontSize: "12px",
+      lineHeight: 1.6,
+      borderLeft: "2px solid " + (isAL ? "#b86840" : "#d4c4a8"),
+      paddingLeft: "10px",
+      marginBottom: "8px"
+    }
+  }, "「" + a.quote + "」") : null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: "13px",
+      color: "#3d2e1f",
+      lineHeight: 1.7
+    }
+  }, a.note || a.text), /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginTop: "6px",
+      color: isAL ? "#b86840" : "#a89478"
+    }
+  }, authorLabel, " \xB7 ", time), replies.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: "8px",
+      paddingTop: "8px",
+      borderTop: "1px dashed #d4c4a8"
+    }
+  }, replies.map(function (r) {
+    return /*#__PURE__*/React.createElement(AnnotationCard, {
+      key: r.id,
+      ann: r,
+      replies: []
+    });
+  })));
+}
+
+/* ─── Entry View ─── */
+function EntryView(props) {
+  var entry = props.entry,
+    showBack = props.showBack,
+    onBack = props.onBack,
+    onDelete = props.onDelete;
+  var _q = useState(null);
+  var quote = _q[0];
+  var setQuote = _q[1];
+  var _qs = useState(-1);
+  var quoteStart = _qs[0];
+  var setQuoteStart = _qs[1];
+  var _qe = useState(-1);
+  var quoteEnd = _qe[0];
+  var setQuoteEnd = _qe[1];
+  var _anns = useState(entry.annotations || []);
+  var annotations = _anns[0];
+  var setAnnotations = _anns[1];
+  var _sub = useState(false);
+  var submitting = _sub[0];
+  var setSubmitting = _sub[1];
+  var tf = TIME_FEELS[entry.time_of_day] || TIME_FEELS.morning;
+  useEffect(function () {
+    setAnnotations(entry.annotations || []);
+    setQuote(null);
+    // if entry loaded without annotations, fetch them
+    if (entry.id && !entry.annotations) {
+      api("/annotations?entry_id=" + entry.id).then(function (data) {
+        if (Array.isArray(data)) setAnnotations(data);
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+  }, [entry.id]);
+  function handleSelect(text, start, end) {
+    setQuote(text);
+    setQuoteStart(start);
+    setQuoteEnd(end);
+  }
+  function handleAnnotation(noteText) {
+    setSubmitting(true);
+    apiPost("/annotations", {
+      entry_id: entry.id,
+      quote: quote,
+      quote_start: quoteStart,
+      quote_end: quoteEnd,
+      note: noteText,
+      author: "tsuki"
+    }).then(function (data) {
+      setAnnotations(function (prev) {
+        return prev.concat([data]);
+      });
+      setQuote(null);
+      setSubmitting(false);
+      window.getSelection && window.getSelection().removeAllRanges();
+    }).catch(function (e) {
+      console.error(e);
+      // fallback: add locally
+      var local = {
+        id: "l" + Date.now(),
+        quote: quote,
+        quote_start: quoteStart,
+        quote_end: quoteEnd,
+        note: noteText,
+        author: "tsuki",
+        created_at: new Date().toISOString()
+      };
+      setAnnotations(function (prev) {
+        return prev.concat([local]);
+      });
+      setQuote(null);
+      setSubmitting(false);
+    });
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 120px"
+    }
+  }, showBack && /*#__PURE__*/React.createElement("button", {
+    onClick: onBack,
+    className: "btn",
+    style: {
+      marginBottom: "16px",
+      padding: "6px 14px"
+    }
+  }, "\u2190 BACK"), showBack && onDelete && /*#__PURE__*/React.createElement("button", {
+    onClick: function () {
+      if (confirm("Delete this diary entry?")) onDelete(entry.id);
+    },
+    className: "btn",
+    style: {
+      marginBottom: "16px",
+      padding: "6px 14px",
+      marginLeft: "8px",
+      borderColor: "#b84830",
+      color: "#b84830"
+    }
+  }, "\u2716 DELETE"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#faf5e8",
+      border: "2px solid #d4c4a8",
+      boxShadow: "4px 4px 0 #d4c4a8",
+      padding: "16px 18px",
+      marginBottom: "18px",
+      borderRadius: "0px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      marginBottom: "12px",
+      paddingBottom: "10px",
+      borderBottom: "2px dashed #d4c4a8"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: "13px",
+      fontWeight: "bold",
+      color: "#3d2818"
+    }
+  }, entry.entry_date || entry.date), /*#__PURE__*/React.createElement(TimeFeelBadge, {
+    timefeel: entry.time_of_day || entry.timefeel
+  }), entry.mood && function () {
+    var moodData = MOODS.find(function (m) {
+      return m.key === entry.mood;
+    });
+    return moodData ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        display: "inline-block",
+        padding: "2px 8px",
+        fontSize: "9px",
+        letterSpacing: "1px",
+        color: "#fff",
+        background: moodData.color,
+        borderRadius: "0px"
+      }
+    }, moodData.emoji, " ", moodData.label) : null;
+  }(), entry.weather && function () {
+    var weatherData = WEATHERS.find(function (w) {
+      return w.key === entry.weather;
+    });
+    return weatherData ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        display: "inline-block",
+        padding: "2px 8px",
+        fontSize: "9px",
+        letterSpacing: "1px",
+        color: "#fff",
+        background: weatherData.color,
+        borderRadius: "0px"
+      }
+    }, weatherData.emoji, " ", weatherData.label) : null;
+  }()), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      fontSize: "7px",
+      letterSpacing: "2px"
+    }
+  }, "WORD OF THE DAY"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: "14px",
+      color: "#3d2818",
+      fontWeight: "bold",
+      letterSpacing: "1px"
+    }
+  }, entry.word_of_day || entry.word))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderLeft: "4px solid " + tf.color,
+      background: "#faf5e8",
+      padding: "24px 24px 24px 20px",
+      boxShadow: "3px 3px 0 #d4c4a8",
+      marginBottom: "20px"
+    }
+  }, /*#__PURE__*/React.createElement(EntryBody, {
+    entryId: entry.id,
+    body: entry.body,
+    annotations: annotations,
+    onSelect: handleSelect
+  })), annotations.length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "2px dashed #d4c4a8",
+      marginBottom: "14px"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "10px"
+    }
+  }, annotations.length, " ANNOTATION", annotations.length > 1 ? "S" : ""), (function() {
+    // group annotations: top-level vs replies
+    var topLevel = [];
+    var repliesMap = {};
+    annotations.forEach(function(a) {
+      if (a.parent_id) {
+        if (!repliesMap[a.parent_id]) repliesMap[a.parent_id] = [];
+        repliesMap[a.parent_id].push(a);
+      } else {
+        topLevel.push(a);
+      }
+    });
+    return topLevel.map(function(a) {
+      return /*#__PURE__*/React.createElement(AnnotationCard, {
+        key: a.id,
+        ann: a,
+        replies: repliesMap[a.id] || []
+      });
+    });
+  })()), /*#__PURE__*/React.createElement(AnnotationBar, {
+    quote: quote,
+    disabled: submitting,
+    onSubmit: handleAnnotation,
+    onClear: function () {
+      setQuote(null);
+      window.getSelection && window.getSelection().removeAllRanges();
+    }
+  }));
+}
+
+/* ─── LOG Page ─── */
+function LogPage(props) {
+  var entries = props.entries,
+    onSelect = props.onSelect;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "12px"
+    }
+  }, entries.length, " ENTRIES"), entries.map(function (e) {
+    var tf = TIME_FEELS[e.time_of_day] || TIME_FEELS.morning;
+    var preview = e.body.replace(/\n/g, " ").slice(0, 50) + (e.body.length > 50 ? "…" : "");
+    var annCount = e.annotation_count || (e.annotations ? e.annotations.length : 0);
+    return /*#__PURE__*/React.createElement("div", {
+      key: e.id,
+      onClick: function () {
+        onSelect(e);
+      },
+      className: "log-card",
+      onMouseEnter: function (ev) {
+        ev.currentTarget.style.transform = "translate(-1px,-1px)";
+      },
+      onMouseLeave: function (ev) {
+        ev.currentTarget.style.transform = "translate(0,0)";
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: "5px",
+        background: tf.color,
+        flexShrink: 0
+      }
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "12px 14px",
+        flex: 1,
+        overflow: "hidden"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "4px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: "8px"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: "12px",
+        color: "#3d2e1f"
+      }
+    }, e.entry_date), /*#__PURE__*/React.createElement(TimeFeelBadge, {
+      timefeel: e.time_of_day,
+      style: {
+        fontSize: "8px",
+        padding: "1px 6px"
+      }
+    })), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: "13px",
+      color: "#3d2818"
+    }
+  }, e.word_of_day), e.mood && function () {
+      var moodData = MOODS.find(function (m) {
+        return m.key === e.mood;
+      });
+      return moodData ? /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: "10px",
+          marginLeft: "6px"
+        }
+      }, moodData.emoji) : null;
+    }(), e.weather && function () {
+      var weatherData = WEATHERS.find(function (w) {
+        return w.key === e.weather;
+      });
+      return weatherData ? /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: "10px",
+          marginLeft: "4px"
+        }
+      }, weatherData.emoji) : null;
+    }()), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: "12px",
+        color: "#a89478",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"
+      }
+    }, preview), annCount > 0 && /*#__PURE__*/React.createElement("div", {
+      className: "label",
+      style: {
+        fontSize: "8px",
+        marginTop: "4px",
+        color: "#b86840"
+      }
+    }, annCount, " ANNOTATION", annCount > 1 ? "S" : "")));
+  }), entries.length === 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      color: "#a89478",
+      fontSize: "12px",
+      padding: "40px 0"
+    }
+  }, "No entries yet."));
+}
+
+/* ─── WORDS (Calendar) Page ─── */
+function WordsPage(props) {
+  var entries = props.entries,
+    onSelect = props.onSelect;
+  var _mo = useState(0);
+  var monthOffset = _mo[0];
+  var setMonthOffset = _mo[1];
+  var now = new Date();
+  var viewDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+  var year = viewDate.getFullYear();
+  var month = viewDate.getMonth();
+  var daysInMonth = new Date(year, month + 1, 0).getDate();
+  var firstDow = new Date(year, month, 1).getDay();
+  var monthStr = viewDate.toLocaleDateString("en", {
+    year: "numeric",
+    month: "long"
+  }).toUpperCase();
+  var entryMap = useMemo(function () {
+    var m = {};
+    entries.forEach(function (e) {
+      m[e.entry_date] = e;
+    });
+    return m;
+  }, [entries]);
+  var cells = [];
+  for (var i = 0; i < firstDow; i++) cells.push(null);
+  for (var d = 1; d <= daysInMonth; d++) {
+    var ds = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+    cells.push({
+      day: d,
+      entry: entryMap[ds] || null
+    });
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "16px"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function () {
+      setMonthOffset(function (p) {
+        return p - 1;
+      });
+    },
+    className: "btn",
+    style: {
+      padding: "6px 12px"
+    }
+  }, "\u2190"), /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      fontSize: "11px",
+      color: "#3d2e1f"
+    }
+  }, monthStr), /*#__PURE__*/React.createElement("button", {
+    onClick: function () {
+      setMonthOffset(function (p) {
+        return p + 1;
+      });
+    },
+    className: "btn",
+    style: {
+      padding: "6px 12px"
+    }
+  }, "\u2192")), /*#__PURE__*/React.createElement("div", {
+    className: "dow-header"
+  }, ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(function (d) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: d,
+      style: {
+        textAlign: "center",
+        fontSize: "8px",
+        letterSpacing: "2px",
+        color: "#a89478"
+      }
+    }, d);
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "cal-grid"
+  }, cells.map(function (cell, i) {
+    if (!cell) return /*#__PURE__*/React.createElement("div", {
+      key: "e" + i
+    });
+    var e = cell.entry;
+    var tf = e ? TIME_FEELS[e.time_of_day] || TIME_FEELS.morning : null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      onClick: function () {
+        if (e) onSelect(e);
+      },
+      className: e ? "cal-cell cal-filled" : "cal-cell cal-empty",
+      onMouseEnter: function (ev) {
+        if (e) ev.currentTarget.style.transform = "translate(-1px,-1px)";
+      },
+      onMouseLeave: function (ev) {
+        ev.currentTarget.style.transform = "translate(0,0)";
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: "8px",
+        color: "#a89478"
+      }
+    }, cell.day), e ? (function() {
+      // 显示当天的心情 emoji，而不是 word_of_day
+      var moodData = e.mood ? MOODS.find(function(m) { return m.key === e.mood; }) : null;
+      var moodEmoji = moodData ? moodData.emoji : "\uD83D\uDCD6";
+      return /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: "16px",
+          color: moodData ? moodData.color : "#3d2818",
+          textAlign: "center",
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }
+      }, moodEmoji);
+    })() : /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: "4px",
+        height: "4px",
+        background: "#d4c4a8"
+      }
+    })), tf && /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: "3px",
+        background: tf.color,
+        margin: "0 -3px -3px"
+      }
+    }));
+  })));
+}
+
+/* ─── Write Page ─── */
+function WritePage(props) {
+  var onSave = props.onSave;
+  var now = new Date();
+  var todayStr = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+  var _d = useState(todayStr);
+  var entryDate = _d[0];
+  var setEntryDate = _d[1];
+  var _tod = useState("morning");
+  var timeOfDay = _tod[0];
+  var setTimeOfDay = _tod[1];
+  var _w = useState("");
+  var wordOfDay = _w[0];
+  var setWordOfDay = _w[1];
+  var _mood = useState("");
+  var mood = _mood[0];
+  var setMood = _mood[1];
+  var _weather = useState("");
+  var weather = _weather[0];
+  var setWeather = _weather[1];
+  var _b = useState("");
+  var body = _b[0];
+  var setBody = _b[1];
+  var _saving = useState(false);
+  var saving = _saving[0];
+  var setSaving = _saving[1];
+  var _err = useState("");
+  var errMsg = _err[0];
+  var setErrMsg = _err[1];
+  function handleSubmit() {
+    if (!entryDate || !body.trim()) return;
+    setSaving(true);
+    setErrMsg("");
+    apiPost("/entries", {
+      entry_date: entryDate,
+      time_of_day: timeOfDay,
+      word_of_day: wordOfDay.trim(),
+      body: body.trim(),
+      mood: mood,
+      weather: weather
+    }).then(function (data) {
+      setSaving(false);
+      onSave();
+    }).catch(function (e) {
+      setSaving(false);
+      setErrMsg(e.message || "Save failed");
+    });
+  }
+  var todOptions = ["dawn", "morning", "afternoon", "dusk", "night", "latenight"];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "16px"
+    }
+  }, "NEW ENTRY"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "DATE"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    className: "input",
+    value: entryDate,
+    onChange: function (e) {
+      setEntryDate(e.target.value);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "TIME OF DAY"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "6px"
+    }
+  }, todOptions.map(function (t) {
+    var tf = TIME_FEELS[t];
+    var active = timeOfDay === t;
+    return /*#__PURE__*/React.createElement("button", {
+      key: t,
+      onClick: function () {
+        setTimeOfDay(t);
+      },
+      style: {
+        padding: "4px 10px",
+        fontSize: "9px",
+        letterSpacing: "2px",
+        textTransform: "uppercase",
+        fontFamily: "'zpix',monospace",
+        cursor: "pointer",
+        border: "2px solid " + (active ? tf.color : "#d4c4a8"),
+        background: active ? tf.color : "#faf5e8",
+        color: active ? "#faf5e8" : "#3d2e1f"
+      }
+    }, tf.label);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "WORD OF THE DAY"), /*#__PURE__*/React.createElement("input", {
+    className: "input",
+    value: wordOfDay,
+    onChange: function (e) {
+      setWordOfDay(e.target.value);
+    },
+    placeholder: "A word that represents today..."
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "MOOD"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "6px"
+    }
+  }, MOODS.map(function (m) {
+    var active = mood === m.key;
+    return /*#__PURE__*/React.createElement("button", {
+      key: m.key,
+      onClick: function () {
+        setMood(active ? "" : m.key);
+      },
+      style: {
+        padding: "6px 12px",
+        fontSize: "11px",
+        letterSpacing: "1px",
+        fontFamily: "'zpix',monospace",
+        cursor: "pointer",
+        border: "2px solid " + (active ? m.color : "#d4c4a8"),
+        background: active ? m.color : "#faf5e8",
+        color: active ? "#fff" : "#3d2e1f",
+        borderRadius: "4px",
+        transition: "all 0.15s"
+      }
+    }, m.emoji, " ", m.label);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "WEATHER"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "6px"
+    }
+  }, WEATHERS.map(function (w) {
+    var active = weather === w.key;
+    return /*#__PURE__*/React.createElement("button", {
+      key: w.key,
+      onClick: function () {
+        setWeather(active ? "" : w.key);
+      },
+      style: {
+        padding: "6px 12px",
+        fontSize: "11px",
+        letterSpacing: "1px",
+        fontFamily: "'zpix',monospace",
+        cursor: "pointer",
+        border: "2px solid " + (active ? w.color : "#d4c4a8"),
+        background: active ? w.color : "#faf5e8",
+        color: active ? "#fff" : "#3d2e1f",
+        borderRadius: "4px",
+        transition: "all 0.15s"
+      }
+    }, w.emoji, " ", w.label);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "DIARY BODY"), /*#__PURE__*/React.createElement("textarea", {
+    className: "input",
+    value: body,
+    onChange: function (e) {
+      setBody(e.target.value);
+    },
+    placeholder: "Write your diary entry here...",
+    style: {
+      minHeight: "200px",
+      resize: "vertical",
+      lineHeight: "1.8"
+    }
+  })), errMsg && /*#__PURE__*/React.createElement("div", {
+    className: "err-box"
+  }, errMsg), /*#__PURE__*/React.createElement("button", {
+    onClick: handleSubmit,
+    disabled: saving || !body.trim(),
+    className: saving || !body.trim() ? "btn" : "btn-dk",
+    style: {
+      width: "100%",
+      padding: "10px",
+      marginTop: "8px"
+    }
+  }, saving ? "SAVING..." : "SAVE ENTRY"));
+}
+
+/* ─── Dual Home Page (AI & User Diaries) ─── */
+function DualHomePage(props) {
+  var entries = props.entries,
+    onSelect = props.onSelect;
+  var aiEntries = entries.filter(function (e) {
+    return e.author === "A.L." || e.author === "ai";
+  });
+  var userEntries = entries.filter(function (e) {
+    return e.author === "user" || e.author === "tsuki" || !e.author;
+  });
+  var latestAI = aiEntries.length > 0 ? aiEntries[0] : null;
+  var latestUser = userEntries.length > 0 ? userEntries[0] : null;
+
+  function DiaryCard(_ref2) {
+    var entry = _ref2.entry,
+      side = _ref2.side,
+      onOpenDetail = _ref2.onOpenDetail;
+    if (!entry) {
+      var emptyLabel = side === "ai" ? "no A.L.'s diary yet" : "No diary yet";
+      var emptySub = side === "ai" ? "A.L. will write at 23:30" : "Write your first diary!";
+      return /*#__PURE__*/React.createElement("div", {
+        style: {
+          flex: 1,
+          background: "#faf5e8",
+          border: "2px solid #d4c4a8",
+          borderRadius: "12px",
+          padding: "24px 16px",
+          minHeight: "280px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "3px 3px 0 #d4c4a8"
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: { fontSize: "32px", marginBottom: "12px", opacity: 0.5 }
+      }, side === "ai" ? "🐱" : "📝"), /*#__PURE__*/React.createElement("div", {
+        style: { fontSize: "11px", color: "#a89478", textAlign: "center", letterSpacing: "2px" }
+      }, emptyLabel), /*#__PURE__*/React.createElement("div", {
+        style: { fontSize: "9px", color: "#d4c4a8", marginTop: "6px" }
+      }, emptySub));
+    }
+    var tf = TIME_FEELS[entry.time_of_day] || TIME_FEELS.morning;
+    var moodData = entry.mood ? MOODS.find(function (m) { return m.key === entry.mood; }) : null;
+    var weatherData = entry.weather ? WEATHERS.find(function (w) { return w.key === entry.weather; }) : null;
+    var preview = entry.body ? entry.body.replace(/\\n/g, " ").slice(0, 100) + (entry.body.length > 100 ? "..." : "") : "";
+    var sideEmoji = side === "ai" ? "❤️" : "🐾";
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        background: "#faf5e8",
+        border: "2px solid #d4c4a8",
+        borderRadius: "12px",
+        overflow: "hidden",
+        boxShadow: "3px 3px 0 #d4c4a8",
+        cursor: "pointer",
+        transition: "transform 0.15s ease",
+        display: "flex",
+        flexDirection: "column"
+      },
+      onClick: function () { onOpenDetail(entry); }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: "90px",
+        background: "linear-gradient(135deg, " + tf.color + "35 0%, " + tf.color + "15 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: { fontSize: "40px", filter: "grayscale(50%)", opacity: 0.8 }
+    }, sideEmoji), /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: "absolute",
+        bottom: "6px",
+        left: "10px",
+        right: "10px",
+        background: "rgba(255,255,255,0.85)",
+        padding: "3px 8px",
+        borderRadius: "3px",
+        fontSize: "9px",
+        color: "#3d2e1f",
+        letterSpacing: "1px",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        textAlign: "center"
+      }
+    }, entry.word_of_day || "Untitled")), /*#__PURE__*/React.createElement("div", {
+      style: { padding: "12px 12px 10px" }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "6px",
+        marginBottom: "8px"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "11px", fontWeight: "bold", color: "#3d2818" }
+    }, entry.entry_date), /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "9px", color: tf.color, background: tf.color + "20", padding: "2px 6px", borderRadius: "3px" }
+    }, tf.label), moodData && /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "9px", padding: "2px 6px", border: "1px solid " + moodData.color, color: moodData.color, borderRadius: "3px" }
+    }, moodData.emoji, " ", moodData.label), weatherData && /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "9px", padding: "2px 6px", border: "1px solid " + weatherData.color, color: weatherData.color, borderRadius: "3px" }
+    }, weatherData.emoji, " ", weatherData.label)), preview && /*#__PURE__*/React.createElement("div", {
+      style: { fontSize: "11px", color: "#6b5b4f", lineHeight: "1.6", opacity: 0.85 }
+    }, preview), !preview && /*#__PURE__*/React.createElement("div", {
+      style: { fontSize: "11px", color: "#c4b8a8", fontStyle: "italic" }
+    }, "Tap to read...")));
+  }
+
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "700px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      marginBottom: "24px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "40px",
+      fontSize: "14px",
+      color: "#3d2e1f",
+      letterSpacing: "3px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: "18px"
+    }
+  }, "\u2764\uFE0F"), "A.L."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "60",
+    height: "24",
+    viewBox: "0 0 60 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M0 12 H15 L18 6 L24 18 L27 12 L60 12",
+    stroke: "#b86840",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    fill: "none"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: "18px"
+    }
+  }, "\uD83D\uDC3E"), "Tsuki"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: "16px",
+      alignItems: "stretch"
+    }
+  }, /*#__PURE__*/React.createElement(DiaryCard, {
+    entry: latestAI,
+    side: "ai",
+    onOpenDetail: function (e) {
+      return onSelect(e, "home");
+    }
+  }), /*#__PURE__*/React.createElement(DiaryCard, {
+    entry: latestUser,
+    side: "user",
+    onOpenDetail: function (e) {
+      return onSelect(e, "home");
+    }
+  })));
+}
+
+/* ─── Main App ─── */
+function App() {
+  var _page = useState("home");
+  var page = _page[0];
+  var setPage = _page[1];
+  var _entries = useState([]);
+  var entries = _entries[0];
+  var setEntries = _entries[1];
+  var _detail = useState(null);
+  var detailEntry = _detail[0];
+  var setDetailEntry = _detail[1];
+  var _from = useState("log");
+  var detailFrom = _from[0];
+  var setDetailFrom = _from[1];
+  var _loading = useState(false);
+  var loading = _loading[0];
+  var setLoading = _loading[1];
+  function loadEntries() {
+    setLoading(true);
+    api("/entries").then(function (data) {
+      if (Array.isArray(data)) setEntries(data);
+      setLoading(false);
+    }).catch(function (e) {
+      console.error(e);
+      setLoading(false);
+    });
+  }
+  useEffect(function () {
+    loadEntries();
+  }, []);
+  function openDetail(entry, from) {
+    if (entry.id) {
+      api("/entry?id=" + entry.id).then(function (full) {
+        setDetailEntry(full);
+        setDetailFrom(from);
+        setPage("detail");
+      }).catch(function (e) {
+        console.error(e);
+        setDetailEntry(entry);
+        setDetailFrom(from);
+        setPage("detail");
+      });
+    } else {
+      setDetailEntry(entry);
+      setDetailFrom(from);
+      setPage("detail");
+    }
+  }
+  var latest = entries.length > 0 ? entries[0] : null;
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: "shell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dot-bg"
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "relative",
+      zIndex: 1
+    }
+  }, /*#__PURE__*/React.createElement(Header, {
+    page: page,
+    setPage: setPage,
+    setDetailFrom: setDetailFrom
+  }), page === "home" && !loading && /*#__PURE__*/React.createElement(DualHomePage, {
+    entries: entries,
+    onSelect: function (e, from) {
+      openDetail(e, from || "home");
+    }
+  }), page === "home" && loading && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      color: "#a89478",
+      fontSize: "12px",
+      padding: "60px 16px"
+    }
+  }, "Loading..."), page === "log" && /*#__PURE__*/React.createElement(LogPage, {
+    entries: entries,
+    onSelect: function (e) {
+      openDetail(e, "log");
+    }
+  }), page === "words" && /*#__PURE__*/React.createElement(WordsPage, {
+    entries: entries,
+    onSelect: function (e) {
+      openDetail(e, "words");
+    }
+  }), page === "write" && /*#__PURE__*/React.createElement(WritePage, {
+    onSave: function () {
+      loadEntries();
+      setPage("log");
+    }
+  }), page === "detail" && detailEntry && /*#__PURE__*/React.createElement(EntryView, {
+    entry: detailEntry,
+    showBack: true,
+    onBack: function () {
+      setPage(detailFrom);
+    },
+    onDelete: function (id) {
+      apiDelete("/entries/" + id).then(function () {
+        loadEntries();
+        setPage(detailFrom);
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+  }), (page === "log" || page === "words") && /*#__PURE__*/React.createElement("div", {
+    className: "footer"
+  }, "EMBER \xB7 Built with \u2661 by Tsuki & A.L.")));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
+</script>
+</body>
+</html>
