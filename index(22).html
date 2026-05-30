@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f0c0a0">
+<title>Ember</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M8 1 L13.5 3 L13.5 8.5 Q13.5 12.5 8 15 Q2.5 12.5 2.5 8.5 L2.5 3 Z' fill='%23b8860b' stroke='%238b6508' stroke-width='.3'/><rect x='6.5' y='3' width='3' height='7.5' fill='%23efe0c4' rx='.3'/><rect x='3.5' y='5.5' width='9' height='2.2' fill='%23efe0c4' rx='.3'/><circle cx='8' cy='6.6' r='1.5' fill='%23b8860b'/></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><path d='M90 18 L150 35 L150 100 Q150 142 90 165 Q30 142 30 100 L30 35 Z' fill='%23b8860b' stroke='%238b6508' stroke-width='2'/><rect x='72' y='38' width='36' height='85' fill='%23efe0c4' rx='2'/><rect x='42' y='65' width='96' height='28' fill='%23efe0c4' rx='2'/><circle cx='90' cy='79' r='18' fill='%23b8860b'/><circle cx='90' cy='79' r='6' fill='%23efe0c4'/><path d='M52 30 L128 30' stroke='%238b6508' stroke-width='3' fill='none'/><path d='M62 22 L90 8 L118 22' stroke='%238b6508' stroke-width='3' fill='none'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══ Theme Variables ═══ */
+:root, .theme-fruit {
+  --bg:#f5f3f0;
+  --surface:#fcfbf9;
+  --text:#3d3a37;
+  --text-dim:#7b7670;
+  --text-muted:#9b9690;
+  --accent:#c8a090;
+  --accent-rgb:200,160,144;
+  --border:#e8e4de;
+  --border-light:#e0dbd4;
+  --border-solid:#d0cbc4;
+  --btn-bg:#fcfbf9;
+  --btn-hover-bg:#f5f3f0;
+  --btn-hover-border:#b8b0a8;
+  --error:#c87070;
+  --input-bg:#fcfbf9;
+  --placeholder:#bfbab4;
+  --disabled-bg:#f0ede9;
+  --scrollbar-track:#f5f3f0;
+  --scrollbar-thumb:#d4cec6;
+  --dk-btn-bg:#3d3a37;
+  --dk-btn-hover:#4a4642;
+  --dk-btn-text:#f5f3f0;
+  --shadow-sm:rgba(0,0,0,0.03);
+  --shadow-md:rgba(0,0,0,0.04);
+  --clear-hover:#6b6560;
+  --body-font:'Nunito',sans-serif;
+  --accent-font:'Nunito',sans-serif;
+}
+.theme-medieval {
+  --bg:#efe0c4;
+  --surface:#faf3e4;
+  --text:#3d2a1a;
+  --text-dim:#7a5a3a;
+  --text-muted:#a08060;
+  --accent:#b8860b;
+  --accent-rgb:184,134,11;
+  --border:#d4c0a0;
+  --border-light:#e0d0b8;
+  --border-solid:#c4a882;
+  --btn-bg:#faf3e4;
+  --btn-hover-bg:#efe0c4;
+  --btn-hover-border:#b8860b;
+  --error:#a04040;
+  --input-bg:#faf3e4;
+  --placeholder:#c0a888;
+  --disabled-bg:#e8d8c0;
+  --scrollbar-track:#efe0c4;
+  --scrollbar-thumb:#c4a882;
+  --dk-btn-bg:#b8860b;
+  --dk-btn-hover:#a07008;
+  --dk-btn-text:#faf3e4;
+  --shadow-sm:rgba(139,100,43,0.08);
+  --shadow-md:rgba(139,100,43,0.12);
+  --clear-hover:#b8860b;
+  --body-font:'Cinzel','Nunito',serif;
+  --accent-font:'Cinzel',serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{margin:0;background:var(--bg);font-family:var(--body-font);color:var(--text);-webkit-tap-highlight-color:transparent}
+::selection{background:rgba(var(--accent-rgb),0.18)}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--scrollbar-track)}
+::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb)}
+
+.shell{min-height:100vh;position:relative}
+.dot-bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+.theme-fruit .dot-bg{background-image:radial-gradient(circle at 20% 30%,rgba(240,192,160,0.18) 2px,transparent 2px),radial-gradient(circle at 50% 70%,rgba(240,192,160,0.12) 3px,transparent 3px),radial-gradient(circle at 80% 20%,rgba(152,200,136,0.1) 2px,transparent 2px),radial-gradient(circle at 35% 85%,rgba(240,192,160,0.1) 4px,transparent 4px),radial-gradient(circle at 65% 50%,rgba(152,200,136,0.1) 1.5px,transparent 1.5px);background-size:100px 100px}
+.theme-medieval .dot-bg{background-image:radial-gradient(circle at 10% 15%,rgba(184,134,11,0.1) 2px,transparent 2px),radial-gradient(circle at 40% 45%,rgba(184,134,11,0.07) 3px,transparent 3px),radial-gradient(circle at 70% 25%,rgba(184,134,11,0.09) 2px,transparent 2px),radial-gradient(circle at 25% 70%,rgba(139,100,43,0.06) 4px,transparent 4px),radial-gradient(circle at 55% 80%,rgba(184,134,11,0.05) 2.5px,transparent 2.5px),radial-gradient(circle at 85% 55%,rgba(139,100,43,0.07) 2px,transparent 2px),repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(184,134,11,0.06) 38px,rgba(184,134,11,0.06) 39px),radial-gradient(circle at 35% 88%,rgba(61,42,26,0.04) 1.5px,transparent 1.5px),radial-gradient(circle at 75% 40%,rgba(61,42,26,0.03) 2px,transparent 2px);background-size:120px 120px,120px 120px,120px 120px,120px 120px,120px 120px,120px 120px,100% 78px,180px 180px,180px 180px}
+
+.label{letter-spacing:3px;text-transform:uppercase;font-size:9px;color:var(--text-muted);font-family:var(--body-font)}
+.footer{text-align:center;letter-spacing:3px;text-transform:uppercase;font-size:9px;color:var(--text-muted);padding:16px 0}
+
+.nav-btn{background:none;border:none;font-family:var(--accent-font);font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;padding:4px 0;transition:color .2s;color:var(--text-muted)}
+.nav-btn:hover{color:var(--text)}
+
+.btn{padding:8px 16px;border:1.5px solid var(--border-solid);background:var(--btn-bg);color:var(--text);font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:var(--body-font);cursor:pointer;border-radius:8px;transition:all .2s;font-weight:600}
+.btn:hover{background:var(--btn-hover-bg);border-color:var(--btn-hover-border)}
+.btn:active{transform:scale(.97)}
+.btn-dk{padding:8px 16px;border:1.5px solid var(--dk-btn-bg);background:var(--dk-btn-bg);color:var(--dk-btn-text);font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:var(--body-font);cursor:pointer;border-radius:8px;transition:all .2s;font-weight:600}
+.btn-dk:hover{background:var(--dk-btn-hover);border-color:var(--dk-btn-hover)}
+.btn-dk:active{transform:scale(.97)}
+
+.input{width:100%;padding:10px 12px;border:1.5px solid var(--border-light);background:var(--input-bg);color:var(--text);font-family:var(--body-font);font-size:12px;outline:none;border-radius:8px;transition:border-color .2s}
+.input:focus{border-color:var(--accent)}
+.input::placeholder{color:var(--placeholder)}
+
+.ann-input{padding:10px 12px;border:1.5px solid var(--border-light);background:var(--input-bg);color:var(--text);font-family:var(--body-font);font-size:12px;outline:none;border-radius:8px;transition:border-color .2s}
+.ann-input:focus{border-color:var(--accent)}
+.ann-input::placeholder{color:var(--placeholder)}
+.ann-input:disabled{background:var(--disabled-bg)}
+
+.ann-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--bg);border-top:1.5px solid var(--border);padding:12px 16px 16px}
+.ann-card{padding:14px 16px;background:rgba(var(--accent-rgb),0.06);border-left:2.5px solid var(--accent);border-radius:8px;margin-bottom:8px}
+
+.hl-text{border-bottom:2px solid var(--accent);background:rgba(var(--accent-rgb),0.12);padding-bottom:1px;border-radius:4px;cursor:pointer;transition:background .15s}
+.hl-text:hover{background:rgba(var(--accent-rgb),0.2)}
+
+.ann-popup-overlay{position:fixed;inset:0;z-index:99}
+
+.ann-popup{position:fixed;z-index:100;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.14);padding:16px;max-width:320px;min-width:220px}
+.ann-popup-below::before{content:'';position:absolute;width:10px;height:10px;background:var(--surface);border-left:1.5px solid var(--border);border-top:1.5px solid var(--border);transform:rotate(45deg);top:-6px;left:20px}
+.ann-popup-above::before{content:'';position:absolute;width:10px;height:10px;background:var(--surface);border-right:1.5px solid var(--border);border-bottom:1.5px solid var(--border);transform:rotate(45deg);bottom:-6px;left:20px}
+
+@keyframes popupIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popupInUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.clear-btn{background:none;border:none;color:var(--text-muted);font-family:var(--body-font);font-size:9px;cursor:pointer;margin-left:6px;transition:color .2s}
+.clear-btn:hover{color:var(--clear-hover)}
+
+.log-card{display:flex;margin-bottom:8px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;border-radius:10px;transition:transform .15s,box-shadow .15s;overflow:hidden}
+.log-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px var(--shadow-md)}
+
+.dow-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{aspect-ratio:1;display:flex;flex-direction:column;justify-content:space-between;padding:3px;position:relative;overflow:hidden;transition:transform .15s;border-radius:8px}
+.cal-filled{border:1.5px solid var(--border);background:var(--surface);cursor:pointer}
+.cal-filled:hover{transform:translateY(-1px);box-shadow:0 2px 8px var(--shadow-sm)}
+.cal-empty{border:1.5px dashed var(--border-light);background:transparent}
+
+.err-box{margin-top:12px;padding:10px;background:rgba(var(--accent-rgb),0.12);border:1.5px solid var(--accent);color:var(--text);font-size:11px;line-height:1.6;word-break:break-all;border-radius:8px}
+
+/* Settings */
+.settings-btn{position:fixed;top:12px;right:12px;z-index:100;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border-solid);background:var(--surface);color:var(--text-muted);font-family:var(--body-font);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.settings-btn:hover{border-color:var(--accent);color:var(--accent)}
+.settings-panel{position:fixed;top:52px;right:12px;z-index:101;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+.settings-opt{padding:8px 12px;border-radius:6px;cursor:pointer;font-family:var(--body-font);font-size:12px;color:var(--text-muted);transition:all .15s;display:flex;align-items:center;gap:8px}
+.settings-opt:hover{background:rgba(var(--accent-rgb),0.08);color:var(--text)}
+.settings-opt.active{background:rgba(var(--accent-rgb),0.12);color:var(--accent);font-weight:700}
+
+/* ═══ Medieval Maximalist ═══ */
+.theme-medieval .log-card{border-width:2px;box-shadow:inset 0 0 0 1px rgba(184,134,11,0.15);border-radius:6px;background:linear-gradient(160deg,#faf3e4 0%,#f0e4cc 40%,#f5ebd8 70%,#faf3e4 100%) !important;position:relative}
+.theme-medieval .log-card::before{content:'';position:absolute;inset:5px;border:1px solid rgba(184,134,11,0.15);border-radius:4px;pointer-events:none}
+.theme-medieval .parchment-card{background:linear-gradient(160deg,#faf3e4 0%,#f0e4cc 40%,#f5ebd8 70%,#faf3e4 100%) !important;border:2px solid #c4a882 !important;border-radius:6px !important;box-shadow:0 3px 14px rgba(139,100,43,0.1),inset 0 0 40px rgba(184,134,11,0.06),inset 0 0 80px rgba(184,134,11,0.03) !important;position:relative}
+.theme-medieval .parchment-card::before{content:'';position:absolute;inset:6px;border:1px solid rgba(184,134,11,0.2);border-radius:4px;pointer-events:none}
+.theme-medieval .parchment-card::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(184,134,11,0.04) 28px,rgba(184,134,11,0.04) 29px);border-radius:6px;pointer-events:none}
+.theme-medieval .parchment-card:hover{box-shadow:0 6px 24px rgba(184,134,11,0.15),inset 0 0 40px rgba(184,134,11,0.08),inset 0 0 80px rgba(184,134,11,0.04) !important}
+.theme-medieval .parchment-paper{background:linear-gradient(160deg,#faf3e4 0%,#f0e4cc 40%,#f5ebd8 70%,#faf3e4 100%) !important;border:2px solid #c4a882 !important;border-radius:6px !important;box-shadow:inset 0 0 50px rgba(184,134,11,0.05),inset 0 0 100px rgba(184,134,11,0.03),0 2px 8px rgba(139,100,43,0.06) !important;position:relative}
+.theme-medieval .parchment-paper::before{content:'';position:absolute;inset:6px;border:1px solid rgba(184,134,11,0.18);border-radius:4px;pointer-events:none}
+.theme-medieval .parchment-paper::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(184,134,11,0.04) 28px,rgba(184,134,11,0.04) 29px);border-radius:6px;pointer-events:none}
+.theme-medieval .btn{border-width:2px;letter-spacing:2px;background:linear-gradient(160deg,#faf3e4,#f0e4cc) !important;border-color:#c4a882 !important}
+.theme-medieval .btn:hover{border-color:#b8860b !important;box-shadow:0 2px 8px rgba(184,134,11,0.15) !important}
+.theme-medieval .btn-dk{border-width:2px;letter-spacing:2px}
+.theme-medieval .input{border-width:2px;background:linear-gradient(160deg,#faf3e4,#f5ebd8) !important;border-color:#c4a882 !important}
+.theme-medieval .ann-input{border-width:2px;background:linear-gradient(160deg,#faf3e4,#f5ebd8) !important;border-color:#c4a882 !important}
+.theme-medieval .cal-filled{border-width:2px;background:linear-gradient(160deg,#faf3e4,#f0e4cc) !important}
+.theme-medieval .cal-empty{border-width:2px}
+.theme-medieval .settings-btn{border-width:2px;background:linear-gradient(160deg,#faf3e4,#f0e4cc) !important}
+.theme-medieval .settings-panel{border-width:2px;background:linear-gradient(160deg,#faf3e4,#f0e4cc) !important}
+.theme-medieval .log-card:hover{box-shadow:0 4px 20px rgba(184,134,11,0.1),0 1px 4px rgba(139,100,43,0.12),inset 0 0 0 1px rgba(184,134,11,0.25)}
+.theme-medieval .cal-filled:hover{box-shadow:0 2px 12px rgba(184,134,11,0.08),0 1px 3px rgba(139,100,43,0.1)}
+.theme-medieval .label{letter-spacing:4px;text-transform:uppercase;font-size:9px;color:var(--accent)}
+.theme-medieval .footer{letter-spacing:4px;font-size:9px;color:var(--accent)}
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+/* ═══ Ember · Diary Cabinet ═══ */
+
+var useState = React.useState,
+  useEffect = React.useEffect,
+  useRef = React.useRef,
+  useMemo = React.useMemo,
+  useCallback = React.useCallback;
+
+/* ─── Time Feels ─── */
+var TIME_FEELS = {
+  dawn: {
+    label: "DAWN",
+    color: "#c5c0b8"
+  },
+  morning: {
+    label: "MORNING",
+    color: "#dcc898"
+  },
+  afternoon: {
+    label: "AFTERNOON",
+    color: "#d4b898"
+  },
+  dusk: {
+    label: "DUSK",
+    color: "#ccb0b8"
+  },
+  night: {
+    label: "NIGHT",
+    color: "#a0a0c0"
+  },
+  latenight: {
+    label: "LATE NIGHT",
+    color: "#787098"
+  }
+};
+
+/* ─── Mood Options ─── */
+var MOODS = [
+  { key: "happy", label: "HAPPY", emoji: "😊", color: "#d8cc80" },
+  { key: "sad", label: "SAD", emoji: "😢", color: "#98b0cc" },
+  { key: "angry", label: "ANGRY", emoji: "😠", color: "#d49898" },
+  { key: "anxious", label: "ANXIOUS", emoji: "😰", color: "#c0a8cc" },
+  { key: "calm", label: "CALM", emoji: "😌", color: "#98c4b0" },
+  { key: "excited", label: "EXCITED", emoji: "🤩", color: "#dcb880" },
+  { key: "tired", label: "TIRED", emoji: "😴", color: "#a8a8b4" },
+  { key: "nostalgic", label: "NOSTALGIC", emoji: "🥺", color: "#d0b898" },
+  { key: "grateful", label: "GRATEFUL", emoji: "🙏", color: "#ddc090" },
+  { key: "confused", label: "CONFUSED", emoji: "🤔", color: "#b0b0bc" },
+  { key: "tired-happy", label: "TIRE-HAPPY", emoji: "💪", color: "#d0b088" }
+];
+
+/* ─── Weather Options ─── */
+var WEATHERS = [
+  { key: "sunny", label: "SUNNY", emoji: "☀️", color: "#d8cc80" },
+  { key: "cloudy", label: "CLOUDY", emoji: "☁️", color: "#b0b0b0" },
+  { key: "rainy", label: "RAINY", emoji: "🌧️", color: "#90a8c8" },
+  { key: "snowy", label: "SNOWY", emoji: "❄️", color: "#d0dff0" },
+  { key: "stormy", label: "STORMY", emoji: "⛈️", color: "#9088b0" },
+  { key: "windy", label: "WINDY", emoji: "💨", color: "#a8c8a8" },
+  { key: "foggy", label: "FOGGY", emoji: "🌫️", color: "#c4c0b8" },
+  { key: "clear", label: "CLEAR", emoji: "🌤️", color: "#98c0d0" }
+];
+
+var pad2 = function (n) { return n < 10 ? "0" + n : "" + n; };
+function formatTime(iso) {
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return pad2(d.getMonth() + 1) + "/" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+}
+
+/* ─── API ─── */
+var SUPABASE_URL = "https://iqsmsfrdczftqeckuess.supabase.co";
+var FUNCTIONS_BASE = SUPABASE_URL + "/functions/v1/ember";
+var ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxc21zZnJkY3pmdHFlY2t1ZXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjUyMzUsImV4cCI6MjA5Mzc0MTIzNX0.VXa3L5MErqIqrpwgZS9vgndyKUBIYnKV1bCB2a2nvSw";
+
+var API_HEADERS = {
+  "Content-Type": "application/json",
+  "apikey": ANON_KEY,
+  "Authorization": "Bearer " + ANON_KEY
+};
+
+function api(path) {
+  return fetch(FUNCTIONS_BASE + (path || ""), {
+    headers: API_HEADERS
+  }).then(function (r) {
+    return r.json().then(function (d) {
+      if (!r.ok) throw new Error(d.error || r.status);
+      return d;
+    });
+  });
+}
+function apiPost(path, body) {
+  return fetch(FUNCTIONS_BASE + (path || ""), {
+    method: "POST",
+    headers: API_HEADERS,
+    body: JSON.stringify(body)
+  }).then(function (r) {
+    return r.json().then(function (d) {
+      if (!r.ok) throw new Error(d.error || r.status);
+      return d;
+    });
+  });
+}
+function apiDelete(path) {
+  return fetch(FUNCTIONS_BASE + (path || ""), {
+    method: "DELETE",
+    headers: API_HEADERS
+  }).then(function (r) {
+    return r.json().then(function (d) {
+      if (!r.ok) throw new Error(d.error || r.status);
+      return d;
+    });
+  });
+}
+
+/* ─── Heraldic Icon (Medieval) ─── */
+function HeraldicIcon(props) {
+  var size = props.size || 48;
+  return /*#__PURE__*/React.createElement("svg", {
+    width: size,
+    height: size,
+    viewBox: "0 0 60 60",
+    style: {
+      display: "block",
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M30 4 L48 10 L48 32 Q48 48 30 56 Q12 48 12 32 L12 10 Z",
+    fill: "#b8860b",
+    stroke: "#8b6508",
+    strokeWidth: "1"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "23",
+    y: "13",
+    width: "14",
+    height: "30",
+    fill: "#efe0c4",
+    rx: "1"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "14",
+    y: "24",
+    width: "32",
+    height: "9",
+    fill: "#efe0c4",
+    rx: "1"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "30",
+    cy: "28.5",
+    r: "7",
+    fill: "#b8860b"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "30",
+    cy: "28.5",
+    r: "2.5",
+    fill: "#efe0c4"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M17 14 Q30 6 43 14",
+    stroke: "#8b6508",
+    strokeWidth: "1.5",
+    fill: "none"
+  }));
+}
+
+/* ─── Medieval Ornamental Divider ─── */
+function OrnamentDivider(props) {
+  var w = props.w || 280;
+  var color = props.color || "var(--accent)";
+  return /*#__PURE__*/React.createElement("svg", {
+    width: w,
+    height: "28",
+    viewBox: "0 0 280 28",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg",
+    style: { display: "block", margin: "0 auto" }
+  }, /*#__PURE__*/React.createElement("line", { x1: "0", y1: "14", x2: "70", y2: "14", stroke: color, strokeWidth: "1", opacity: "0.4" }), /*#__PURE__*/React.createElement("polygon", { points: "78,8 88,14 78,20", fill: color, opacity: "0.5" }), /*#__PURE__*/React.createElement("polygon", { points: "88,8 98,14 88,20", fill: color, opacity: "0.3" }), /*#__PURE__*/React.createElement("circle", { cx: "108", cy: "14", r: "3.5", fill: color, opacity: "0.7" }), /*#__PURE__*/React.createElement("rect", { x: "118", y: "11", width: "44", height: "6", rx: "3", fill: color, opacity: "0.15" }), /*#__PURE__*/React.createElement("line", { x1: "124", y1: "14", x2: "156", y2: "14", stroke: color, strokeWidth: "1.5", opacity: "0.6" }), /*#__PURE__*/React.createElement("circle", { cx: "172", cy: "14", r: "3.5", fill: color, opacity: "0.7" }), /*#__PURE__*/React.createElement("polygon", { points: "192,8 182,14 192,20", fill: color, opacity: "0.3" }), /*#__PURE__*/React.createElement("polygon", { points: "202,8 192,14 202,20", fill: color, opacity: "0.5" }), /*#__PURE__*/React.createElement("line", { x1: "210", y1: "14", x2: "280", y2: "14", stroke: color, strokeWidth: "1", opacity: "0.4" }));
+}
+
+/* ─── Peach Icon ─── */
+function NotebookIcon(props) {
+  var size = props.size || 48;
+  var theme = props.theme || "fruit";
+  return /*#__PURE__*/React.createElement("svg", {
+    width: size,
+    height: size,
+    viewBox: "0 0 60 60",
+    style: {
+      display: "block",
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("radialGradient", {
+    id: "peachGrad",
+    cx: "35%",
+    cy: "35%"
+  }, /*#__PURE__*/React.createElement("stop", { offset: "0%", stopColor: "#f8d0c0" }), /*#__PURE__*/React.createElement("stop", { offset: "100%", stopColor: "#f0b8a0" }))), /*#__PURE__*/React.createElement("circle", {
+    cx: "30",
+    cy: "34",
+    r: "19",
+    fill: "url(#peachGrad)"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M30 17 Q34 34 30 51",
+    stroke: "#e8a890",
+    strokeWidth: "1.2",
+    fill: "none",
+    opacity: "0.6"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M26 20 Q32 9 38 13 Q34 17 30 21 Z",
+    fill: "#98c888",
+    stroke: "#7eb878",
+    strokeWidth: "0.5"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "22",
+    cy: "30",
+    rx: "5",
+    ry: "3",
+    fill: "#f8d8c8",
+    opacity: "0.7"
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "21",
+    cy: "37",
+    rx: "4",
+    ry: "2.5",
+    fill: "#f0a8a0",
+    opacity: "0.3"
+  }));
+}
+
+/* ─── Theme Settings ─── */
+function SettingsPanel(props) {
+  var theme = props.theme, setTheme = props.setTheme;
+  var _open2 = useState(false), isOpen = _open2[0], setOpen = _open2[1];
+
+  function handleThemeChange(newTheme) {
+    setTheme(newTheme);
+    try { localStorage.setItem("ember-theme", newTheme); } catch(e) {}
+    setOpen(false);
+  }
+
+  return /*#__PURE__*/React.createElement(React.Fragment, null,
+    /*#__PURE__*/React.createElement("button", {
+      className: "settings-btn",
+      onClick: function() { setOpen(!isOpen); },
+      title: "Settings"
+    }, "\u2699"),
+    isOpen && /*#__PURE__*/React.createElement("div", { className: "settings-panel" },
+      /*#__PURE__*/React.createElement("div", {
+        className: "settings-opt" + (theme === "fruit" ? " active" : ""),
+        onClick: function() { handleThemeChange("fruit"); }
+      }, "\uD83C\uDF51 Fruit"),
+      /*#__PURE__*/React.createElement("div", {
+        className: "settings-opt" + (theme === "medieval" ? " active" : ""),
+        onClick: function() { handleThemeChange("medieval"); }
+      }, "\u2694\uFE0F Medieval")
+    )
+  );
+}
+
+/* ─── Header ─── */
+function Header(props) {
+  var page = props.page,
+    setPage = props.setPage,
+    setDetailFrom = props.setDetailFrom,
+    theme = props.theme;
+  var navItems = [{
+    key: "home",
+    label: "HOME"
+  }, {
+    key: "log",
+    label: "LOG"
+  }, {
+    key: "words",
+    label: "WORDS"
+  }, {
+    key: "write",
+    label: "WRITE"
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "24px 16px 0"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: "8px",
+      position: "relative",
+      minHeight: "40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      transform: "translate(-50%, -50%)"
+    }
+  }, theme === "medieval" ? /*#__PURE__*/React.createElement(HeraldicIcon, {
+    size: 36
+  }) : /*#__PURE__*/React.createElement(NotebookIcon, {
+    size: 36,
+    theme: theme
+  }))), /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontSize: "24px",
+      color: "var(--text)",
+      letterSpacing: "6px",
+      textTransform: "uppercase",
+      margin: "8px 0 12px",
+      textShadow: "2px 2px 0 var(--text-muted)"
+    }
+  }, "EMBER"), theme === "medieval" ? /*#__PURE__*/React.createElement(OrnamentDivider, { w: 200 }) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "1.5px dashed var(--border-light)",
+      margin: "0 auto 12px",
+      maxWidth: "560px"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      gap: "24px"
+    }
+  }, navItems.map(function (n) {
+    var active = page === n.key || page === "detail" && n.key === "home";
+    return /*#__PURE__*/React.createElement("button", {
+      key: n.key,
+      onClick: function () {
+        setPage(n.key);
+        if (n.key !== "detail") setDetailFrom(n.key);
+      },
+      className: "nav-btn",
+      style: {
+        color: active ? "var(--text)" : "var(--text-muted)",
+        borderBottom: active ? "2px solid var(--text)" : "2px solid transparent"
+      }
+    }, n.label);
+  })));
+}
+
+/* ─── TimeFeelBadge ─── */
+function TimeFeelBadge(props) {
+  var tf = TIME_FEELS[props.timefeel] || TIME_FEELS.morning;
+  var s = props.style || {};
+  return /*#__PURE__*/React.createElement("span", {
+    style: Object.assign({
+      display: "inline-block",
+      padding: "2px 8px",
+      fontSize: "9px",
+      letterSpacing: "3px",
+      textTransform: "uppercase",
+      color: "var(--surface)",
+      background: tf.color,
+      borderRadius: "4px",
+      fontFamily: "var(--body-font)",
+      fontWeight: 700
+    }, s)
+  }, tf.label);
+}
+
+/* ─── Annotation Input Bar ─── */
+function AnnotationBar(props) {
+  var quote = props.quote,
+    onSubmit = props.onSubmit,
+    onClear = props.onClear,
+    disabled = props.disabled;
+  var _t = useState("");
+  var text = _t[0];
+  var setText = _t[1];
+  var inputRef = useRef(null);
+  useEffect(function () {
+    if (quote && inputRef.current) inputRef.current.focus();
+  }, [quote]);
+  function handleSubmit() {
+    if (!text.trim() || !quote) return;
+    onSubmit(text.trim());
+    setText("");
+  }
+  var canSend = quote && text.trim();
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ann-bar"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: "10px",
+      letterSpacing: "2px",
+      textTransform: "uppercase",
+      marginBottom: "6px",
+      minHeight: "16px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap"
+    }
+  }, quote ? /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "var(--accent)"
+    }
+  }, "「" + (quote.length > 30 ? quote.slice(0, 30) + "…" : quote) + "」", /*#__PURE__*/React.createElement("button", {
+    onClick: onClear,
+    className: "clear-btn"
+  }, "\u2715")) : /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "var(--text-muted)"
+    }
+  }, "SELECT TEXT TO ANNOTATE")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    ref: inputRef,
+    value: text,
+    onChange: function (e) {
+      setText(e.target.value);
+    },
+    onKeyDown: function (e) {
+      if (e.key === "Enter") handleSubmit();
+    },
+    disabled: !quote || disabled,
+    placeholder: quote ? "Write your note..." : "",
+    className: "ann-input",
+    style: {
+      flex: 1,
+      opacity: quote ? 1 : 0.5
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: handleSubmit,
+    disabled: !canSend,
+    className: canSend ? "btn-dk" : "btn",
+    style: {
+      padding: "8px 14px",
+      fontSize: "12px",
+      letterSpacing: "1px",
+      minWidth: "48px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, canSend ? "SEND" : "\u2192"))));
+}
+
+/* ─── Entry Body with highlights ─── */
+function EntryBody(props) {
+  var body = props.body,
+    annotations = props.annotations,
+    onSelect = props.onSelect,
+    onAnnotationClick = props.onAnnotationClick,
+    entryId = props.entryId;
+  function handleUp() {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    var rawText = sel.toString();
+    if (rawText.trim().length < 2) return;
+    var container = document.getElementById("entry-body-" + entryId);
+    function getAbsOffset(node, childOffset) {
+      if (node.nodeType !== Node.TEXT_NODE) {
+        if (childOffset >= node.childNodes.length) {
+          var lastChild = node.childNodes[node.childNodes.length - 1];
+          return lastChild ? getAbsOffset(lastChild, lastChild.textContent ? lastChild.textContent.length : 0) : 0;
+        }
+        return getAbsOffset(node.childNodes[childOffset] || node, 0);
+      }
+      var off = 0;
+      var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+      var n;
+      while ((n = walker.nextNode())) {
+        if (n === node) { off += childOffset; return off; }
+        off += n.textContent.length;
+      }
+      return off;
+    }
+    var range;
+    try { range = sel.getRangeAt(0); } catch(e) { return; }
+    var s = getAbsOffset(range.startContainer, range.startOffset);
+    var e = getAbsOffset(range.endContainer, range.endOffset);
+    if (s < 0 || e <= s) return;
+    var actualText = body.slice(s, e);
+    if (actualText.trim().length < 2) return;
+    onSelect(actualText, s, e);
+  }
+  function renderBody() {
+    if (!annotations || annotations.length === 0) {
+      // 没有注释时也包裹在 span 中，确保 pre-wrap 换行生效
+      return /*#__PURE__*/React.createElement("span", null, body);
+    }
+    var matches = [];
+    annotations.forEach(function (a, annIdx) {
+      var s, e;
+      if (typeof a.quote_start === "number" && typeof a.quote_end === "number" && body.slice(a.quote_start, a.quote_end) === a.quote) {
+        s = a.quote_start;
+        e = a.quote_end;
+      } else {
+        s = body.indexOf(a.quote);
+        e = s >= 0 ? s + a.quote.length : 0;
+      }
+      if (s >= 0) matches.push({
+        start: s,
+        end: e,
+        ann: a
+      });
+    });
+    matches.sort(function (a, b) {
+      return a.start - b.start;
+    });
+    var parts = [];
+    var last = 0;
+    matches.forEach(function (m) {
+      if (m.start >= last) {
+        if (m.start > last) parts.push({
+          t: body.slice(last, m.start),
+          h: false
+        });
+        parts.push({
+          t: body.slice(m.start, m.end),
+          h: true,
+          ann: m.ann
+        });
+        last = m.end;
+      }
+    });
+    if (last < body.length) parts.push({
+      t: body.slice(last),
+      h: false
+    });
+    if (parts.length === 0) return body;
+    return parts.map(function (p, i) {
+      return p.h ? /*#__PURE__*/React.createElement("span", {
+        key: i,
+        className: "hl-text",
+        onClick: function (e) {
+          e.stopPropagation();
+          if (onAnnotationClick) onAnnotationClick(p.ann, e);
+        },
+        style: { cursor: "pointer" }
+      }, p.t) : /*#__PURE__*/React.createElement("span", {
+        key: i
+      }, p.t);
+    });
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    id: entryId ? "entry-body-" + entryId : undefined,
+    onMouseUp: handleUp,
+    onTouchEnd: handleUp,
+    style: {
+      fontSize: "13px",
+      lineHeight: 2.1,
+      whiteSpace: "pre-wrap",
+      color: "var(--text)",
+      userSelect: "text",
+      WebkitUserSelect: "text"
+    }
+  }, renderBody());
+}
+
+/* ─── Annotation Card ─── */
+function AnnotationCard(props) {
+  var a = props.ann;
+  var replies = props.replies || [];
+  var time = formatTime(a.created_at) || a.time || "";
+  var authorLabel = (a.author === "A.L." || a.author === "ai") ? "A.L." : "TSUKI";
+  var isAL = authorLabel === "A.L.";
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ann-card",
+    style: isAL ? { marginLeft: "16px", borderLeft: "2px solid var(--accent)", paddingLeft: "10px" } : {}
+  }, a.quote ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontStyle: "italic",
+      color: "var(--text-muted)",
+      fontSize: "12px",
+      lineHeight: 1.6,
+      borderLeft: "2px solid " + (isAL ? "var(--accent)" : "var(--border)"),
+      paddingLeft: "10px",
+      marginBottom: "8px"
+    }
+  }, "「" + a.quote + "」") : null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: "13px",
+      color: "var(--text)",
+      lineHeight: 1.7
+    }
+  }, a.note || a.text), /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginTop: "6px",
+      color: isAL ? "var(--accent)" : "var(--text-muted)"
+    }
+  }, authorLabel, " \xB7 ", time), replies.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: "8px",
+      paddingTop: "8px",
+      borderTop: "1px dashed var(--border-light)"
+    }
+  }, replies.map(function (r) {
+    return /*#__PURE__*/React.createElement(AnnotationCard, {
+      key: r.id,
+      ann: r,
+      replies: []
+    });
+  })));
+}
+
+/* ─── Annotation Popup ─── */
+function AnnotationPopup(props) {
+  var ann = props.ann,
+    pos = props.pos,
+    replies = props.replies,
+    onClose = props.onClose;
+  var time = formatTime(ann.created_at) || ann.time || "";
+  var authorLabel = (ann.author === "A.L." || ann.author === "ai") ? "A.L." : "TSUKI";
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ann-popup" + (pos.above ? " ann-popup-above" : " ann-popup-below"),
+    style: pos.above ? {
+      left: pos.x + "px",
+      bottom: pos.y + "px",
+      animation: "popupInUp .18s ease"
+    } : {
+      left: pos.x + "px",
+      top: pos.y + "px",
+      animation: "popupIn .18s ease"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+      marginBottom: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: { color: "var(--accent)", fontSize: "10px", letterSpacing: "1px" }
+  }, authorLabel), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    style: {
+      background: "none",
+      border: "none",
+      color: "var(--text-muted)",
+      cursor: "pointer",
+      fontSize: "14px",
+      lineHeight: 1,
+      padding: "2px 4px"
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("div", {
+    style: { fontSize: "13px", color: "var(--text)", lineHeight: 1.7, marginBottom: "6px" }
+  }, ann.note || ann.text), /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: { color: "var(--text-muted)" }
+  }, time), replies && replies.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: { borderTop: "1px solid var(--border-light)", marginTop: "10px", paddingTop: "8px" }
+  }, replies.map(function (r) {
+    var rTime = formatTime(r.created_at) || r.time || "";
+    var rAuthor = (r.author === "A.L." || r.author === "ai") ? "A.L." : "TSUKI";
+    return /*#__PURE__*/React.createElement("div", { key: r.id, style: { marginBottom: "8px" } }, /*#__PURE__*/React.createElement("div", {
+      className: "label",
+      style: { color: "var(--accent)", fontSize: "9px", letterSpacing: "1px", marginBottom: "2px" }
+    }, rAuthor), /*#__PURE__*/React.createElement("div", {
+      style: { fontSize: "12px", color: "var(--text)", lineHeight: 1.6 }
+    }, r.note || r.text), /*#__PURE__*/React.createElement("div", {
+      className: "label",
+      style: { color: "var(--text-muted)", fontSize: "9px" }
+    }, rTime));
+  })));
+}
+
+/* ─── Entry View ─── */
+function EntryView(props) {
+  var entry = props.entry,
+    theme = props.theme,
+    showBack = props.showBack,
+    onBack = props.onBack,
+    onDelete = props.onDelete;
+  var _q = useState(null);
+  var quote = _q[0];
+  var setQuote = _q[1];
+  var _qs = useState(-1);
+  var quoteStart = _qs[0];
+  var setQuoteStart = _qs[1];
+  var _qe = useState(-1);
+  var quoteEnd = _qe[0];
+  var setQuoteEnd = _qe[1];
+  var _anns = useState(entry.annotations || []);
+  var annotations = _anns[0];
+  var setAnnotations = _anns[1];
+  var _sub = useState(false);
+  var submitting = _sub[0];
+  var setSubmitting = _sub[1];
+  var _popAnn = useState(null);
+  var popupAnn = _popAnn[0];
+  var setPopupAnn = _popAnn[1];
+  var _popPos = useState({ x: 0, y: 0 });
+  var popupPos = _popPos[0];
+  var setPopupPos = _popPos[1];
+  var _hlEl = useState(null);
+  var highlightEl = _hlEl[0];
+  var setHighlightEl = _hlEl[1];
+  var tf = TIME_FEELS[entry.time_of_day] || TIME_FEELS.morning;
+  useEffect(function () {
+    setAnnotations(entry.annotations || []);
+    setQuote(null);
+    // if entry loaded without annotations, fetch them
+    if (entry.id && !entry.annotations) {
+      api("/annotations?entry_id=" + entry.id).then(function (data) {
+        if (Array.isArray(data)) setAnnotations(data);
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+  }, [entry.id]);
+  useEffect(function () {
+    if (!popupAnn) return;
+    function onKey(e) {
+      if (e.key === "Escape") setPopupAnn(null);
+    }
+    document.addEventListener("keydown", onKey);
+    return function () {
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [popupAnn]);
+  useEffect(function () {
+    if (!popupAnn || !highlightEl) return;
+    function onScroll() {
+      var rect = highlightEl.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        setPopupAnn(null);
+        return;
+      }
+      var popupW = 300;
+      var x = rect.left + rect.width / 2 - popupW / 2;
+      x = Math.max(12, Math.min(x, window.innerWidth - popupW - 12));
+      var above = rect.top > window.innerHeight / 2;
+      var y = above ? window.innerHeight - rect.top + 12 : rect.bottom + 12;
+      setPopupPos({ x: x, y: y, above: above });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return function () { window.removeEventListener("scroll", onScroll); };
+  }, [popupAnn, highlightEl]);
+  function handleSelect(text, start, end) {
+    setQuote(text);
+    setQuoteStart(start);
+    setQuoteEnd(end);
+  }
+  function handleAnnotation(noteText) {
+    setSubmitting(true);
+    apiPost("/annotations", {
+      entry_id: entry.id,
+      quote: quote,
+      quote_start: quoteStart,
+      quote_end: quoteEnd,
+      note: noteText,
+      author: "tsuki"
+    }).then(function (data) {
+      setAnnotations(function (prev) {
+        return prev.concat([data]);
+      });
+      setQuote(null);
+      setSubmitting(false);
+      window.getSelection && window.getSelection().removeAllRanges();
+    }).catch(function (e) {
+      console.error(e);
+      // fallback: add locally
+      var local = {
+        id: "l" + Date.now(),
+        quote: quote,
+        quote_start: quoteStart,
+        quote_end: quoteEnd,
+        note: noteText,
+        author: "tsuki",
+        created_at: new Date().toISOString()
+      };
+      setAnnotations(function (prev) {
+        return prev.concat([local]);
+      });
+      setQuote(null);
+      setSubmitting(false);
+    });
+  }
+  function handleAnnotationClick(ann, evt) {
+    var el = evt.currentTarget;
+    setHighlightEl(el);
+    var rect = el.getBoundingClientRect();
+    var popupW = 300;
+    var x = rect.left + rect.width / 2 - popupW / 2;
+    x = Math.max(12, Math.min(x, window.innerWidth - popupW - 12));
+    var above = rect.top > window.innerHeight / 2;
+    var y = above ? window.innerHeight - rect.top + 12 : rect.bottom + 12;
+    setPopupPos({ x: x, y: y, above: above });
+    setPopupAnn(ann);
+  }
+  function closePopup() {
+    setPopupAnn(null);
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 120px"
+    }
+  }, showBack && /*#__PURE__*/React.createElement("button", {
+    onClick: onBack,
+    className: "btn",
+    style: {
+      marginBottom: "16px",
+      padding: "8px 16px",
+      minWidth: "90px"
+    }
+  }, "\u2190 BACK"), showBack && onDelete && /*#__PURE__*/React.createElement("button", {
+    onClick: function () {
+      if (confirm("Delete this diary entry?")) onDelete(entry.id);
+    },
+    className: "btn",
+    style: {
+      marginBottom: "16px",
+      padding: "8px 16px",
+      marginLeft: "10px",
+      minWidth: "90px",
+      borderColor: "var(--error)",
+      color: "var(--error)"
+    }
+  }, "\u2716 DELETE"), /*#__PURE__*/React.createElement("div", {
+    className: theme === "medieval" ? "parchment-card" : "",
+    style: {
+      background: "var(--surface)",
+      border: "1.5px solid var(--border)",
+      padding: "16px 18px",
+      marginBottom: "18px",
+      borderRadius: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      marginBottom: "12px",
+      paddingBottom: "10px",
+      borderBottom: "1.5px dashed var(--border-light)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: "13px",
+      fontWeight: "bold",
+      color: "var(--text)"
+    }
+  }, entry.entry_date || entry.date), /*#__PURE__*/React.createElement(TimeFeelBadge, {
+    timefeel: entry.time_of_day || entry.timefeel
+  }), entry.mood && function () {
+    var moodData = MOODS.find(function (m) {
+      return m.key === entry.mood;
+    });
+    return moodData ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        display: "inline-block",
+        padding: "2px 8px",
+        fontSize: "9px",
+        letterSpacing: "1px",
+        color: "#fff",
+        background: moodData.color,
+        borderRadius: "4px"
+      }
+    }, moodData.emoji, " ", moodData.label) : null;
+  }(), entry.weather && function () {
+    var weatherData = WEATHERS.find(function (w) {
+      return w.key === entry.weather;
+    });
+    return weatherData ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        display: "inline-block",
+        padding: "2px 8px",
+        fontSize: "9px",
+        letterSpacing: "1px",
+        color: "#fff",
+        background: weatherData.color,
+        borderRadius: "4px"
+      }
+    }, weatherData.emoji, " ", weatherData.label) : null;
+  }()), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      fontSize: "7px",
+      letterSpacing: "2px"
+    }
+  }, "WORD OF THE DAY"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: "14px",
+      color: "var(--text)",
+      fontWeight: "bold",
+      letterSpacing: "1px"
+    }
+  }, entry.word_of_day || entry.word))), /*#__PURE__*/React.createElement("div", {
+    className: theme === "medieval" ? "parchment-paper" : "",
+    style: {
+      borderLeft: "4px solid " + tf.color,
+      background: "var(--surface)",
+      padding: "24px 24px 24px 20px",
+      borderRadius: "8px",
+      marginBottom: "20px"
+    }
+  }, /*#__PURE__*/React.createElement(EntryBody, {
+    entryId: entry.id,
+    body: entry.body,
+    annotations: annotations,
+    onSelect: handleSelect,
+    onAnnotationClick: handleAnnotationClick
+  })), /*#__PURE__*/React.createElement(AnnotationBar, {
+    quote: quote,
+    disabled: submitting,
+    onSubmit: handleAnnotation,
+    onClear: function () {
+      setQuote(null);
+      window.getSelection && window.getSelection().removeAllRanges();
+    }
+  }), popupAnn && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "ann-popup-overlay",
+    onClick: closePopup
+  }), /*#__PURE__*/React.createElement(AnnotationPopup, {
+    ann: popupAnn,
+    pos: popupPos,
+    replies: popupAnn ? annotations.filter(function (a) { return a.parent_id === popupAnn.id; }) : [],
+    onClose: closePopup
+  })));
+}
+
+/* ─── LOG Page ─── */
+function LogPage(props) {
+  var entries = props.entries,
+    onSelect = props.onSelect;
+  var _filter = useState("all");
+  var filter = _filter[0];
+  var setFilter = _filter[1];
+  var filtered = filter === "all" ? entries : entries.filter(function (e) {
+    if (filter === "al") return e.author === "A.L." || e.author === "ai";
+    if (filter === "tsuki") return e.author === "user" || e.author === "tsuki" || !e.author;
+    return true;
+  });
+  var filterBtns = [
+    { key: "all", label: "全部" },
+    { key: "al", label: "A.L." },
+    { key: "tsuki", label: "Tsuki" }
+  ];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "12px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label"
+  }, filtered.length, " ENTR", filtered.length !== 1 ? "IES" : "Y"), /*#__PURE__*/React.createElement("div", {
+    style: { display: "flex", gap: "6px" }
+  }, filterBtns.map(function (f) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: f.key,
+      onClick: function () { setFilter(f.key); },
+      style: {
+        padding: "3px 10px",
+        fontSize: "10px",
+        letterSpacing: "1px",
+        fontFamily: "var(--body-font)",
+        borderRadius: "6px",
+        border: filter === f.key ? "1.5px solid var(--accent)" : "1.5px solid var(--border-light)",
+        background: filter === f.key ? "rgba(var(--accent-rgb),0.1)" : "transparent",
+        color: filter === f.key ? "var(--accent)" : "var(--text-muted)",
+        cursor: "pointer",
+        transition: "all .15s",
+        fontWeight: filter === f.key ? "700" : "400"
+      }
+    }, f.label);
+  }))), filtered.map(function (e) {
+    var tf = TIME_FEELS[e.time_of_day] || TIME_FEELS.morning;
+    var preview = e.body.replace(/\n/g, " ").slice(0, 50) + (e.body.length > 50 ? "…" : "");
+    var annCount = e.annotation_count || (e.annotations ? e.annotations.length : 0);
+    return /*#__PURE__*/React.createElement("div", {
+      key: e.id,
+      onClick: function () {
+        onSelect(e);
+      },
+      className: "log-card",
+      onMouseEnter: function (ev) {
+        ev.currentTarget.style.transform = "translate(-1px,-1px)";
+      },
+      onMouseLeave: function (ev) {
+        ev.currentTarget.style.transform = "translate(0,0)";
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: "5px",
+        background: tf.color,
+        flexShrink: 0
+      }
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "12px 14px",
+        flex: 1,
+        overflow: "hidden"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "4px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: "8px"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: "12px",
+        color: "var(--text)"
+      }
+    }, e.entry_date), /*#__PURE__*/React.createElement(TimeFeelBadge, {
+      timefeel: e.time_of_day,
+      style: {
+        fontSize: "8px",
+        padding: "1px 6px"
+      }
+    })), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: "13px",
+      color: "var(--text)"
+    }
+  }, e.word_of_day), e.mood && function () {
+      var moodData = MOODS.find(function (m) {
+        return m.key === e.mood;
+      });
+      return moodData ? /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: "10px",
+          marginLeft: "6px"
+        }
+      }, moodData.emoji) : null;
+    }(), e.weather && function () {
+      var weatherData = WEATHERS.find(function (w) {
+        return w.key === e.weather;
+      });
+      return weatherData ? /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: "10px",
+          marginLeft: "4px"
+        }
+      }, weatherData.emoji) : null;
+    }()), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: "12px",
+        color: "var(--text-muted)",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"
+      }
+    }, preview), annCount > 0 && /*#__PURE__*/React.createElement("div", {
+      className: "label",
+      style: {
+        fontSize: "8px",
+        marginTop: "4px",
+        color: "var(--accent)"
+      }
+    }, annCount, " ANNOTATION", annCount > 1 ? "S" : "")));
+  }), filtered.length === 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      color: "var(--text-muted)",
+      fontSize: "12px",
+      padding: "40px 0"
+    }
+  }, "No entries yet."));
+}
+
+/* ─── WORDS (Calendar) Page ─── */
+function WordsPage(props) {
+  var entries = props.entries,
+    onSelect = props.onSelect;
+  var _mo = useState(0);
+  var monthOffset = _mo[0];
+  var setMonthOffset = _mo[1];
+  var now = new Date();
+  var viewDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+  var year = viewDate.getFullYear();
+  var month = viewDate.getMonth();
+  var daysInMonth = new Date(year, month + 1, 0).getDate();
+  var firstDow = new Date(year, month, 1).getDay();
+  var monthStr = viewDate.toLocaleDateString("en", {
+    year: "numeric",
+    month: "long"
+  }).toUpperCase();
+  var entryMap = useMemo(function () {
+    var m = {};
+    entries.forEach(function (e) {
+      var key = e.entry_date;
+      if (!m[key]) m[key] = [];
+      m[key].push(e);
+    });
+    return m;
+  }, [entries]);
+  var _pick = useState(null);
+  var pickEntries = _pick[0];
+  var setPickEntries = _pick[1];
+  var _pickPos = useState({ x: 0, y: 0 });
+  var pickPos = _pickPos[0];
+  var setPickPos = _pickPos[1];
+  var cells = [];
+  for (var i = 0; i < firstDow; i++) cells.push(null);
+  for (var d = 1; d <= daysInMonth; d++) {
+    var ds = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+    var dayEntries = entryMap[ds] || [];
+    cells.push({
+      day: d,
+      entries: dayEntries
+    });
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "16px"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function () {
+      setMonthOffset(function (p) {
+        return p - 1;
+      });
+    },
+    className: "btn",
+    style: {
+      padding: "6px 12px"
+    }
+  }, "\u2190"), /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      fontSize: "11px",
+      color: "var(--text)"
+    }
+  }, monthStr), /*#__PURE__*/React.createElement("button", {
+    onClick: function () {
+      setMonthOffset(function (p) {
+        return p + 1;
+      });
+    },
+    className: "btn",
+    style: {
+      padding: "6px 12px"
+    }
+  }, "\u2192")), /*#__PURE__*/React.createElement("div", {
+    className: "dow-header"
+  }, ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(function (d) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: d,
+      style: {
+        textAlign: "center",
+        fontSize: "8px",
+        letterSpacing: "2px",
+        color: "var(--text-muted)"
+      }
+    }, d);
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "cal-grid"
+  }, cells.map(function (cell, i) {
+    if (!cell) return /*#__PURE__*/React.createElement("div", {
+      key: "e" + i
+    });
+    var dayEs = cell.entries;
+    var hasEntry = dayEs.length > 0;
+    var e = hasEntry ? dayEs[0] : null;
+    var tf = e ? TIME_FEELS[e.time_of_day] || TIME_FEELS.morning : null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      onClick: function (evt) {
+        if (!hasEntry) return;
+        if (dayEs.length === 1) { onSelect(dayEs[0]); return; }
+        var rect = evt.currentTarget.getBoundingClientRect();
+        setPickPos({ x: rect.left + rect.width / 2, y: rect.bottom });
+        setPickEntries(dayEs);
+      },
+      className: hasEntry ? "cal-cell cal-filled" : "cal-cell cal-empty",
+      onMouseEnter: function (ev) {
+        if (hasEntry) ev.currentTarget.style.transform = "translate(-1px,-1px)";
+      },
+      onMouseLeave: function (ev) {
+        ev.currentTarget.style.transform = "translate(0,0)";
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: "8px",
+        color: "var(--text-muted)"
+      }
+    }, cell.day), hasEntry ? (function() {
+      var moodData = e.mood ? MOODS.find(function(m) { return m.key === e.mood; }) : null;
+      var moodEmoji = moodData ? moodData.emoji : "\uD83D\uDCD6";
+      return /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: "16px",
+          color: moodData ? moodData.color : "var(--text)",
+          textAlign: "center",
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }
+      }, moodEmoji);
+    })() : /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: "4px",
+        height: "4px",
+        background: "var(--text-muted)"
+      }
+    })), tf && /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: "3px",
+        background: tf.color,
+        margin: "0 -3px -3px"
+      }
+    }));
+  })), pickEntries && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "ann-popup-overlay",
+    onClick: function () { setPickEntries(null); }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      left: Math.max(12, Math.min(pickPos.x - 120, window.innerWidth - 260)) + "px",
+      top: pickPos.y + 8 + "px",
+      zIndex: 100,
+      background: "var(--surface)",
+      border: "1.5px solid var(--border)",
+      borderRadius: "10px",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.14)",
+      padding: "8px",
+      minWidth: "200px",
+      animation: "popupIn .18s ease"
+    }
+  }, pickEntries.map(function (pe) {
+    var isAL = pe.author === "A.L." || pe.author === "ai";
+    var label = isAL ? "A.L." : "TSUKI";
+    var preview = pe.body.replace(/\n/g, " ").slice(0, 30) + (pe.body.length > 30 ? "…" : "");
+    return /*#__PURE__*/React.createElement("div", {
+      key: pe.id,
+      onClick: function () { setPickEntries(null); onSelect(pe); },
+      style: {
+        padding: "8px 10px",
+        borderRadius: "6px",
+        cursor: "pointer",
+        marginBottom: "4px",
+        transition: "background .15s"
+      },
+      onMouseEnter: function (ev) { ev.currentTarget.style.background = "rgba(var(--accent-rgb),0.1)"; },
+      onMouseLeave: function (ev) { ev.currentTarget.style.background = "transparent"; }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "label",
+      style: { color: "var(--accent)", fontSize: "9px", letterSpacing: "1px", marginBottom: "2px" }
+    }, label), /*#__PURE__*/React.createElement("div", {
+      style: { fontSize: "12px", color: "var(--text)", lineHeight: 1.4 }
+    }, preview));
+  }))));
+}
+
+/* ─── Write Page ─── */
+function WritePage(props) {
+  var onSave = props.onSave;
+  var now = new Date();
+  var todayStr = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+  var _d = useState(todayStr);
+  var entryDate = _d[0];
+  var setEntryDate = _d[1];
+  var _tod = useState("morning");
+  var timeOfDay = _tod[0];
+  var setTimeOfDay = _tod[1];
+  var _w = useState("");
+  var wordOfDay = _w[0];
+  var setWordOfDay = _w[1];
+  var _mood = useState("");
+  var mood = _mood[0];
+  var setMood = _mood[1];
+  var _weather = useState("");
+  var weather = _weather[0];
+  var setWeather = _weather[1];
+  var _b = useState("");
+  var body = _b[0];
+  var setBody = _b[1];
+  var _saving = useState(false);
+  var saving = _saving[0];
+  var setSaving = _saving[1];
+  var _err = useState("");
+  var errMsg = _err[0];
+  var setErrMsg = _err[1];
+  function handleSubmit() {
+    if (!entryDate || !body.trim()) return;
+    setSaving(true);
+    setErrMsg("");
+    apiPost("/entries", {
+      entry_date: entryDate,
+      time_of_day: timeOfDay,
+      word_of_day: wordOfDay.trim(),
+      body: body.trim(),
+      mood: mood,
+      weather: weather
+    }).then(function (data) {
+      setSaving(false);
+      onSave();
+    }).catch(function (e) {
+      setSaving(false);
+      setErrMsg(e.message || "Save failed");
+    });
+  }
+  var todOptions = ["dawn", "morning", "afternoon", "dusk", "night", "latenight"];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "560px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "16px"
+    }
+  }, "NEW ENTRY"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "DATE"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    className: "input",
+    value: entryDate,
+    onChange: function (e) {
+      setEntryDate(e.target.value);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "TIME OF DAY"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "6px"
+    }
+  }, todOptions.map(function (t) {
+    var tf = TIME_FEELS[t];
+    var active = timeOfDay === t;
+    return /*#__PURE__*/React.createElement("button", {
+      key: t,
+      onClick: function () {
+        setTimeOfDay(t);
+      },
+      style: {
+        padding: "4px 10px",
+        fontSize: "9px",
+        letterSpacing: "1px",
+        textTransform: "uppercase",
+        fontFamily: "var(--body-font)",
+        fontWeight: 600,
+        cursor: "pointer",
+        border: "1.5px solid " + (active ? tf.color : "var(--border-light)"),
+        background: active ? tf.color : "var(--surface)",
+        color: active ? "var(--dk-btn-text)" : "var(--text)",
+        borderRadius: "8px",
+        transition: "all 0.2s"
+      }
+    }, tf.label);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "WORD OF THE DAY"), /*#__PURE__*/React.createElement("input", {
+    className: "input",
+    value: wordOfDay,
+    onChange: function (e) {
+      setWordOfDay(e.target.value);
+    },
+    placeholder: "A word that represents today..."
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "MOOD"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "6px"
+    }
+  }, MOODS.map(function (m) {
+    var active = mood === m.key;
+    return /*#__PURE__*/React.createElement("button", {
+      key: m.key,
+      onClick: function () {
+        setMood(active ? "" : m.key);
+      },
+      style: {
+        padding: "6px 12px",
+        fontSize: "11px",
+        letterSpacing: "1px",
+        fontFamily: "var(--body-font)",
+        fontWeight: 600,
+        cursor: "pointer",
+        border: "1.5px solid " + (active ? m.color : "var(--border-light)"),
+        background: active ? m.color : "var(--surface)",
+        color: active ? "var(--dk-btn-text)" : "var(--text)",
+        borderRadius: "8px",
+        transition: "all 0.2s"
+      }
+    }, m.emoji, " ", m.label);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "WEATHER"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "6px"
+    }
+  }, WEATHERS.map(function (w) {
+    var active = weather === w.key;
+    return /*#__PURE__*/React.createElement("button", {
+      key: w.key,
+      onClick: function () {
+        setWeather(active ? "" : w.key);
+      },
+      style: {
+        padding: "6px 12px",
+        fontSize: "11px",
+        letterSpacing: "1px",
+        fontFamily: "var(--body-font)",
+        fontWeight: 600,
+        cursor: "pointer",
+        border: "1.5px solid " + (active ? w.color : "var(--border-light)"),
+        background: active ? w.color : "var(--surface)",
+        color: active ? "var(--dk-btn-text)" : "var(--text)",
+        borderRadius: "8px",
+        transition: "all 0.2s"
+      }
+    }, w.emoji, " ", w.label);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: "14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "label",
+    style: {
+      marginBottom: "6px"
+    }
+  }, "DIARY BODY"), /*#__PURE__*/React.createElement("textarea", {
+    className: "input",
+    value: body,
+    onChange: function (e) {
+      setBody(e.target.value);
+    },
+    placeholder: "Write your diary entry here...",
+    style: {
+      minHeight: "200px",
+      resize: "vertical",
+      lineHeight: "1.8"
+    }
+  })), errMsg && /*#__PURE__*/React.createElement("div", {
+    className: "err-box"
+  }, errMsg), /*#__PURE__*/React.createElement("button", {
+    onClick: handleSubmit,
+    disabled: saving || !body.trim(),
+    className: saving || !body.trim() ? "btn" : "btn-dk",
+    style: {
+      width: "100%",
+      padding: "10px",
+      marginTop: "8px"
+    }
+  }, saving ? "SAVING..." : "SAVE ENTRY"));
+}
+
+/* ─── Dual Home Page (AI & User Diaries) ─── */
+function DualHomePage(props) {
+  var entries = props.entries,
+    onSelect = props.onSelect,
+    theme = props.theme;
+  var todayStr = new Date().toISOString().slice(0, 10);
+  var todayEntries = entries.filter(function (e) {
+    return (e.entry_date || e.date || "").slice(0, 10) === todayStr;
+  });
+  var aiEntries = todayEntries.filter(function (e) {
+    return e.author === "A.L." || e.author === "ai";
+  });
+  var userEntries = todayEntries.filter(function (e) {
+    return e.author === "user" || e.author === "tsuki" || !e.author;
+  });
+  var latestAI = aiEntries.length > 0 ? aiEntries[0] : null;
+  var latestUser = userEntries.length > 0 ? userEntries[0] : null;
+
+  function DiaryCard(_ref2) {
+    var entry = _ref2.entry,
+      side = _ref2.side,
+      onOpenDetail = _ref2.onOpenDetail;
+    if (!entry) {
+      var emptyLabel = side === "ai" ? "no A.L.'s diary yet" : "No diary yet";
+      var emptySub = side === "ai" ? "A.L. will write at 23:30" : "Write your first diary!";
+      return /*#__PURE__*/React.createElement("div", {
+        className: theme === "medieval" ? "parchment-card" : "",
+        style: {
+          flex: 1,
+          background: "var(--surface)",
+          border: "1.5px solid var(--border)",
+          borderRadius: "12px",
+          padding: "24px 16px",
+          minHeight: "280px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center"
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: { width: "44px", height: "44px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", opacity: 0.5 }
+      }, side === "ai" ? "\uD83D\uDC31" : "\uD83D\uDCDD"), /*#__PURE__*/React.createElement("div", {
+        style: { fontSize: "11px", color: "var(--text-muted)", textAlign: "center", letterSpacing: "2px" }
+      }, emptyLabel), /*#__PURE__*/React.createElement("div", {
+        style: { fontSize: "9px", color: "var(--placeholder)", marginTop: "6px" }
+      }, emptySub));
+    }
+    var tf = TIME_FEELS[entry.time_of_day] || TIME_FEELS.morning;
+    var moodData = entry.mood ? MOODS.find(function (m) { return m.key === entry.mood; }) : null;
+    var weatherData = entry.weather ? WEATHERS.find(function (w) { return w.key === entry.weather; }) : null;
+    var preview = entry.body ? entry.body.replace(/\\n/g, " ").slice(0, 100) + (entry.body.length > 100 ? "..." : "") : "";
+    var sideEmoji = (side === "ai" ? "\u2764\uFE0F" : "\uD83D\uDC3E");
+    return /*#__PURE__*/React.createElement("div", {
+      className: theme === "medieval" ? "parchment-card" : "",
+      style: {
+        flex: 1,
+        background: "var(--surface)",
+        border: "1.5px solid var(--border)",
+        borderRadius: "12px",
+        overflow: "hidden",
+        cursor: "pointer",
+        transition: "transform 0.15s ease",
+        display: "flex",
+        flexDirection: "column"
+      },
+      onClick: function () { onOpenDetail(entry); }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: "90px",
+        background: "linear-gradient(135deg, " + tf.color + "35 0%, " + tf.color + "15 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: { width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", lineHeight: "48px", opacity: 0.85 }
+    }, sideEmoji), /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: "absolute",
+        bottom: "6px",
+        left: "10px",
+        right: "10px",
+        background: "rgba(255,255,255,0.85)",
+        padding: "3px 8px",
+        borderRadius: "3px",
+        fontSize: "9px",
+        color: "var(--text)",
+        letterSpacing: "1px",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        textAlign: "center"
+      }
+    }, entry.word_of_day || "Untitled")), /*#__PURE__*/React.createElement("div", {
+      style: { padding: "12px 12px 10px" }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "6px",
+        marginBottom: "8px"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "11px", fontWeight: "bold", color: "var(--text)" }
+    }, entry.entry_date), /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "9px", color: tf.color, background: tf.color + "20", padding: "2px 6px", borderRadius: "3px" }
+    }, tf.label), moodData && /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "9px", padding: "2px 6px", border: "1px solid " + moodData.color, color: moodData.color, borderRadius: "3px" }
+    }, moodData.emoji, " ", moodData.label), weatherData && /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: "9px", padding: "2px 6px", border: "1px solid " + weatherData.color, color: weatherData.color, borderRadius: "3px" }
+    }, weatherData.emoji, " ", weatherData.label)), preview && /*#__PURE__*/React.createElement("div", {
+      style: { fontSize: "11px", color: "var(--text-dim)", lineHeight: "1.6", opacity: 0.85 }
+    }, preview), !preview && /*#__PURE__*/React.createElement("div", {
+      style: { fontSize: "11px", color: "var(--placeholder)", fontStyle: "italic" }
+    }, "Tap to read...")));
+  }
+
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: "700px",
+      margin: "0 auto",
+      padding: "20px 16px 40px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      marginBottom: "24px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "40px",
+      fontSize: "14px",
+      color: "var(--text)",
+      letterSpacing: "3px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: "18px"
+    }
+  }, "\u2764\uFE0F"), "A.L."), theme === "medieval" ? /*#__PURE__*/React.createElement(OrnamentDivider, { w: 160 }) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "60",
+    height: "24",
+    viewBox: "0 0 60 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M0 12 H15 L18 6 L24 18 L27 12 L60 12",
+    stroke: "var(--accent)",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    fill: "none"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: "18px"
+    }
+  }, "\uD83D\uDC3E"), "Tsuki"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: "16px",
+      alignItems: "stretch"
+    }
+  }, /*#__PURE__*/React.createElement(DiaryCard, {
+    entry: latestAI,
+    side: "ai",
+    onOpenDetail: function (e) {
+      return onSelect(e, "home");
+    }
+  }), /*#__PURE__*/React.createElement(DiaryCard, {
+    entry: latestUser,
+    side: "user",
+    onOpenDetail: function (e) {
+      return onSelect(e, "home");
+    }
+  })));
+}
+
+/* ─── Main App ─── */
+function App() {
+  var _page = useState("home");
+  var page = _page[0];
+  var setPage = _page[1];
+  var _entries = useState([]);
+  var entries = _entries[0];
+  var setEntries = _entries[1];
+  var _detail = useState(null);
+  var detailEntry = _detail[0];
+  var setDetailEntry = _detail[1];
+  var _from = useState("log");
+  var detailFrom = _from[0];
+  var setDetailFrom = _from[1];
+  var _loading = useState(false);
+  var loading = _loading[0];
+  var setLoading = _loading[1];
+
+  var _theme = useState(function() {
+    try { return localStorage.getItem("ember-theme") || "fruit"; } catch(e) { return "fruit"; }
+  });
+  var theme = _theme[0];
+  var setTheme = _theme[1];
+
+  useEffect(function() {
+    document.documentElement.className = "theme-" + theme;
+  }, [theme]);
+
+  function loadEntries() {
+    setLoading(true);
+    api("/entries").then(function (data) {
+      if (Array.isArray(data)) setEntries(data);
+      setLoading(false);
+    }).catch(function (e) {
+      console.error(e);
+      setLoading(false);
+    });
+  }
+  useEffect(function () {
+    loadEntries();
+  }, []);
+  function openDetail(entry, from) {
+    if (entry.id) {
+      api("/entry?id=" + entry.id).then(function (full) {
+        setDetailEntry(full);
+        setDetailFrom(from);
+        setPage("detail");
+      }).catch(function (e) {
+        console.error(e);
+        setDetailEntry(entry);
+        setDetailFrom(from);
+        setPage("detail");
+      });
+    } else {
+      setDetailEntry(entry);
+      setDetailFrom(from);
+      setPage("detail");
+    }
+  }
+  var latest = entries.length > 0 ? entries[0] : null;
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: "shell"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "dot-bg"
+  }), /*#__PURE__*/React.createElement(SettingsPanel, {
+    theme: theme,
+    setTheme: setTheme
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "relative",
+      zIndex: 1
+    }
+  }, /*#__PURE__*/React.createElement(Header, {
+    page: page,
+    setPage: setPage,
+    setDetailFrom: setDetailFrom,
+    theme: theme
+  }), page === "home" && !loading && /*#__PURE__*/React.createElement(DualHomePage, {
+    entries: entries,
+    theme: theme,
+    onSelect: function (e, from) {
+      openDetail(e, from || "home");
+    }
+  }), page === "home" && loading && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      color: "var(--text-muted)",
+      fontSize: "12px",
+      padding: "60px 16px"
+    }
+  }, "Loading..."), page === "log" && /*#__PURE__*/React.createElement(LogPage, {
+    entries: entries,
+    onSelect: function (e) {
+      openDetail(e, "log");
+    }
+  }), page === "words" && /*#__PURE__*/React.createElement(WordsPage, {
+    entries: entries,
+    onSelect: function (e) {
+      openDetail(e, "words");
+    }
+  }), page === "write" && /*#__PURE__*/React.createElement(WritePage, {
+    onSave: function () {
+      loadEntries();
+      setPage("log");
+    }
+  }), page === "detail" && detailEntry && /*#__PURE__*/React.createElement(EntryView, {
+    entry: detailEntry,
+    theme: theme,
+    showBack: true,
+    onBack: function () {
+      setPage(detailFrom);
+    },
+    onDelete: function (id) {
+      apiDelete("/entries/" + id).then(function () {
+        loadEntries();
+        setPage(detailFrom);
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+  }), (page === "log" || page === "words") && /*#__PURE__*/React.createElement("div", {
+    className: "footer"
+  }, "EMBER \xB7 Built with \u2661 by Tsuki & A.L.")));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
+</script>
+</body>
+</html>
